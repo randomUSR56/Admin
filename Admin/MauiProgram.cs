@@ -1,4 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
+using Admin.Services;
+using Admin.ViewModels;
+using Admin.Views;
 
 namespace Admin
 {
@@ -15,8 +18,30 @@ namespace Admin
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
+            // Services
+            builder.Services.AddSingleton<AuthTokenStore>();
+
+            builder.Services.AddHttpClient<ApiClient>(client =>
+            {
+                // TODO: Update this to your Laravel backend URL
+                client.BaseAddress = new Uri("http://localhost:8000");
+                client.DefaultRequestHeaders.Add("Accept", "application/json");
+            });
+
+            // ViewModels
+            builder.Services.AddTransient<LoginViewModel>();
+            builder.Services.AddTransient<DashboardViewModel>();
+            builder.Services.AddTransient<UsersViewModel>();
+            builder.Services.AddTransient<UserDetailViewModel>();
+
+            // Pages
+            builder.Services.AddTransient<LoginPage>();
+            builder.Services.AddTransient<DashboardPage>();
+            builder.Services.AddTransient<UsersPage>();
+            builder.Services.AddTransient<UserDetailPage>();
+
 #if DEBUG
-    		builder.Logging.AddDebug();
+            builder.Logging.AddDebug();
 #endif
 
             return builder.Build();

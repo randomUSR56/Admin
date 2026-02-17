@@ -3,12 +3,29 @@
     x:Class="Admin.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:Admin"
-    Title="Admin">
+    xmlns:views="clr-namespace:Admin.Views"
+    Title="OnlyFix Admin">
 
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+    <!-- Login (no tabs/flyout) -->
+    <TabBar Route="Login">
+        <ShellContent
+            Route="LoginPage"
+            ContentTemplate="{DataTemplate views:LoginPage}"
+            Shell.NavBarIsVisible="False"
+            Shell.TabBarIsVisible="False" />
+    </TabBar>
+
+    <!-- Main tabs after login -->
+    <TabBar Route="Main">
+        <ShellContent
+            Route="Dashboard"
+            Title="Dashboard"
+            ContentTemplate="{DataTemplate views:DashboardPage}" />
+
+        <ShellContent
+            Route="Users"
+            Title="Users"
+            ContentTemplate="{DataTemplate views:UsersPage}" />
+    </TabBar>
 
 </Shell>

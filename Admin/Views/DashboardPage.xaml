@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Admin.ViewModels"
+             x:Class="Admin.Views.DashboardPage"
+             x:DataType="vm:DashboardViewModel"
+             Title="Dashboard">
+
+    <Shell.TitleView>
+        <Grid ColumnDefinitions="*,Auto" Padding="0,0,10,0">
+            <Label Text="Dashboard"
+                   FontSize="18"
+                   FontAttributes="Bold"
+                   VerticalOptions="Center" />
+            <Button Grid.Column="1"
+                    Text="Logout"
+                    Command="{Binding LogoutCommand}"
+                    BackgroundColor="Transparent"
+                    TextColor="{StaticResource Primary}"
+                    FontSize="14" />
+        </Grid>
+    </Shell.TitleView>
+
+    <RefreshView Command="{Binding LoadDataCommand}"
+                 IsRefreshing="{Binding IsBusy}">
+        <ScrollView Padding="20">
+            <VerticalStackLayout Spacing="20"
+                                 MaximumWidthRequest="800"
+                                 HorizontalOptions="Center">
+
+                <!-- Welcome -->
+                <Label Text="{Binding WelcomeMessage}"
+                       FontSize="28"
+                       FontAttributes="Bold" />
+
+                <!-- Server Status -->
+                <Border StrokeShape="RoundRectangle 12"
+                        Padding="16"
+                        BackgroundColor="{StaticResource Gray900}">
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="●"
+                               TextColor="{Binding IsServerOnline, Converter={StaticResource StatusColorConverter}}"
+                               FontSize="16"
+                               VerticalOptions="Center" />
+                        <Label Text="{Binding IsServerOnline, Converter={StaticResource StatusTextConverter}}"
+                               FontSize="14"
+                               VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+                </Border>
+
+                <!-- Error -->
+                <Border Stroke="{StaticResource Red100Accent}"
+                        BackgroundColor="#33FF0000"
+                        StrokeShape="RoundRectangle 8"
+                        Padding="12"
+                        IsVisible="{Binding HasError}">
+                    <Label Text="{Binding ErrorMessage}"
+                           TextColor="{StaticResource Red100Accent}"
+                           FontSize="13" />
+                </Border>
+
+                <!-- Quick Stats -->
+                <Label Text="Overview"
+                       FontSize="18"
+                       FontAttributes="Bold" />
+
+                <Border StrokeShape="RoundRectangle 12"
+                        Padding="20"
+                        BackgroundColor="{StaticResource Gray900}">
+                    <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto" ColumnSpacing="12" RowSpacing="4">
+                        <Label Text="Total Users"
+                               FontSize="14"
+                               TextColor="{StaticResource Gray400}"
+                               Grid.Row="0" Grid.Column="0" />
+                        <Label Text="{Binding TotalUsers}"
+                               FontSize="24"
+                               FontAttributes="Bold"
+                               Grid.Row="1" Grid.Column="0" />
+                    </Grid>
+                </Border>
+
+                <!-- Navigation -->
+                <Label Text="Management"
+                       FontSize="18"
+                       FontAttributes="Bold" />
+
+                <Button Text="👥  Manage Users"
+                        Command="{Binding NavigateToUsersCommand}"
+                        HeightRequest="50"
+                        CornerRadius="10"
+                        FontSize="16"
+                        HorizontalOptions="Fill" />
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </RefreshView>
+</ContentPage>

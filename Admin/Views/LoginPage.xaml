@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Admin.ViewModels"
+             x:Class="Admin.Views.LoginPage"
+             x:DataType="vm:LoginViewModel"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="{StaticResource Gray950}">
+
+    <Grid RowDefinitions="*,Auto,*"
+          Padding="30">
+
+        <VerticalStackLayout Grid.Row="1"
+                             Spacing="20"
+                             MaximumWidthRequest="400"
+                             HorizontalOptions="Center"
+                             VerticalOptions="Center">
+
+            <Label Text="OnlyFix Admin"
+                   FontSize="32"
+                   FontAttributes="Bold"
+                   HorizontalTextAlignment="Center"
+                   TextColor="{StaticResource Primary}" />
+
+            <Label Text="Sign in to manage your system"
+                   FontSize="14"
+                   HorizontalTextAlignment="Center"
+                   TextColor="{StaticResource Gray300}" />
+
+            <!-- Error Message -->
+            <Border Stroke="{StaticResource Red100Accent}"
+                    BackgroundColor="#33FF0000"
+                    StrokeShape="RoundRectangle 8"
+                    Padding="12"
+                    IsVisible="{Binding HasError}">
+                <Label Text="{Binding ErrorMessage}"
+                       TextColor="{StaticResource Red100Accent}"
+                       FontSize="13" />
+            </Border>
+
+            <!-- Email -->
+            <VerticalStackLayout Spacing="6">
+                <Label Text="Email"
+                       FontSize="13"
+                       TextColor="{StaticResource Gray200}" />
+                <Entry Text="{Binding Email}"
+                       Placeholder="admin@onlyfix.com"
+                       Keyboard="Email"
+                       ReturnType="Next"
+                       ClearButtonVisibility="WhileEditing" />
+            </VerticalStackLayout>
+
+            <!-- Password -->
+            <VerticalStackLayout Spacing="6">
+                <Label Text="Password"
+                       FontSize="13"
+                       TextColor="{StaticResource Gray200}" />
+                <Entry Text="{Binding Password}"
+                       Placeholder="Enter your password"
+                       IsPassword="True"
+                       ReturnType="Go"
+                       ReturnCommand="{Binding LoginCommand}" />
+            </VerticalStackLayout>
+
+            <!-- Login Button -->
+            <Button Text="{Binding IsBusy, Converter={StaticResource BusyTextConverter}, ConverterParameter='Sign In|Signing in...'}"
+                    Command="{Binding LoginCommand}"
+                    IsEnabled="{Binding IsBusy, Converter={StaticResource InvertBoolConverter}}"
+                    HeightRequest="48"
+                    CornerRadius="8"
+                    FontSize="16"
+                    FontAttributes="Bold" />
+
+            <!-- Loading Indicator -->
+            <ActivityIndicator IsRunning="{Binding IsBusy}"
+                               IsVisible="{Binding IsBusy}"
+                               Color="{StaticResource Primary}"
+                               HorizontalOptions="Center" />
+
+        </VerticalStackLayout>
+    </Grid>
+</ContentPage>
