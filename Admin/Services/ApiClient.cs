@@ -210,6 +210,65 @@ public class ApiClient : IApiClient
             ?? throw new ApiException("Invalid response", (int)response.StatusCode);
     }
 
+    // --- Cars ---
+
+    public async Task<PaginatedResponse<Car>> GetCarsAsync(int page = 1, int? userId = null, string? search = null)
+    {
+        await SetAuthHeaderAsync();
+
+        var query = $"/api/cars?page={page}";
+        if (userId.HasValue)
+            query += $"&user_id={userId.Value}";
+        if (!string.IsNullOrEmpty(search))
+            query += $"&search={Uri.EscapeDataString(search)}";
+
+        var response = await _httpClient.GetAsync(query);
+        await EnsureSuccessAsync(response);
+
+        return await response.Content.ReadFromJsonAsync<PaginatedResponse<Car>>(JsonOptions)
+            ?? throw new ApiException("Invalid response", (int)response.StatusCode);
+    }
+
+    public async Task<Car> GetCarAsync(int id)
+    {
+        await SetAuthHeaderAsync();
+        var response = await _httpClient.GetAsync($"/api/cars/{id}");
+        await EnsureSuccessAsync(response);
+        return await response.Content.ReadFromJsonAsync<Car>(JsonOptions)
+            ?? throw new ApiException("Invalid response", (int)response.StatusCode);
+    }
+
+    public async Task<Car> CreateCarAsync(CreateCarRequest request)
+    {
+        await SetAuthHeaderAsync();
+        var response = await _httpClient.PostAsJsonAsync("/api/cars", request);
+        await EnsureSuccessAsync(response);
+
+        var wrapper = await response.Content.ReadFromJsonAsync<JsonElement>(JsonOptions);
+        if (wrapper.TryGetProperty("data", out var dataElement))
+        {
+            return JsonSerializer.Deserialize<Car>(dataElement.GetRawText(), JsonOptions)
+                ?? throw new ApiException("Invalid response", (int)response.StatusCode);
+        }
+
+        return JsonSerializer.Deserialize<Car>(wrapper.GetRawText(), JsonOptions)
+            ?? throw new ApiException("Invalid response", (int)response.StatusCode);
+    }
+
+    public async Task UpdateCarAsync(int id, UpdateCarRequest request)
+    {
+        await SetAuthHeaderAsync();
+        var response = await _httpClient.PutAsJsonAsync($"/api/cars/{id}", request);
+        await EnsureSuccessAsync(response);
+    }
+
+    public async Task DeleteCarAsync(int id)
+    {
+        await SetAuthHeaderAsync();
+        var response = await _httpClient.DeleteAsync($"/api/cars/{id}");
+        await EnsureSuccessAsync(response);
+    }
+
     // --- Health ---
 
     public async Task<bool> HealthCheckAsync()
