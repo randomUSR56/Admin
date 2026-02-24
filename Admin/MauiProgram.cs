@@ -33,12 +33,16 @@ namespace Admin
             builder.Services.AddTransient<DashboardViewModel>();
             builder.Services.AddTransient<UsersViewModel>();
             builder.Services.AddTransient<UserDetailViewModel>();
+            builder.Services.AddTransient<ProblemsViewModel>();
+            builder.Services.AddTransient<ProblemDetailViewModel>();
 
             // Pages
             builder.Services.AddTransient<LoginPage>();
             builder.Services.AddTransient<DashboardPage>();
             builder.Services.AddTransient<UsersPage>();
             builder.Services.AddTransient<UserDetailPage>();
+            builder.Services.AddTransient<ProblemsPage>();
+            builder.Services.AddTransient<ProblemDetailPage>();
 
 #if DEBUG
             builder.Logging.AddDebug();

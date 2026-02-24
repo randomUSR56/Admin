@@ -26,6 +26,11 @@
             Route="Users"
             Title="Users"
             ContentTemplate="{DataTemplate views:UsersPage}" />
+
+        <ShellContent
+            Route="Problems"
+            Title="Problems"
+            ContentTemplate="{DataTemplate views:ProblemsPage}" />
     </TabBar>
 
 </Shell>
