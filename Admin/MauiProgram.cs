@@ -24,7 +24,7 @@ namespace Admin
             builder.Services.AddHttpClient<ApiClient>(client =>
             {
                 // TODO: Update this to your Laravel backend URL
-                client.BaseAddress = new Uri("http://localhost:8000");
+                client.BaseAddress = new Uri("http://onlyfix.local");
                 client.DefaultRequestHeaders.Add("Accept", "application/json");
             });
 
