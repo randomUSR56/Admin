@@ -100,3 +100,48 @@ public class CategoryColorConverter : IValueConverter
     public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
         => throw new NotSupportedException();
 }
+
+public class TicketStatusColorConverter : IValueConverter
+{
+    public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+    {
+        if (value is string status)
+        {
+            return status.ToLowerInvariant() switch
+            {
+                "open" => Colors.DodgerBlue,
+                "assigned" => Colors.Orange,
+                "in_progress" => Colors.MediumPurple,
+                "completed" => Colors.SeaGreen,
+                "closed" => Colors.Gray,
+                _ => Colors.LightGray
+            };
+        }
+        return Colors.LightGray;
+    }
+
+    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+        => throw new NotSupportedException();
+}
+
+public class TicketPriorityColorConverter : IValueConverter
+{
+    public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+    {
+        if (value is string priority)
+        {
+            return priority.ToLowerInvariant() switch
+            {
+                "urgent" => Colors.Red,
+                "high" => Colors.OrangeRed,
+                "medium" => Colors.Gold,
+                "low" => Colors.SteelBlue,
+                _ => Colors.LightGray
+            };
+        }
+        return Colors.LightGray;
+    }
+
+    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+        => throw new NotSupportedException();
+}
