@@ -31,6 +31,11 @@
             Route="Problems"
             Title="Problems"
             ContentTemplate="{DataTemplate views:ProblemsPage}" />
+
+        <ShellContent
+            Route="Cars"
+            Title="Cars"
+            ContentTemplate="{DataTemplate views:CarsPage}" />
     </TabBar>
 
 </Shell>
