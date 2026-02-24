@@ -64,7 +64,7 @@
                        FontSize="18"
                        FontAttributes="Bold" />
 
-                <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="12">
                     <Border StrokeShape="RoundRectangle 12"
                             Padding="20"
                             BackgroundColor="{StaticResource Gray900}">
@@ -91,6 +91,20 @@
                                    FontAttributes="Bold" />
                         </VerticalStackLayout>
                     </Border>
+
+                    <Border Grid.Column="2"
+                            StrokeShape="RoundRectangle 12"
+                            Padding="20"
+                            BackgroundColor="{StaticResource Gray900}">
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="Total Cars"
+                                   FontSize="14"
+                                   TextColor="{StaticResource Gray400}" />
+                            <Label Text="{Binding TotalCars}"
+                                   FontSize="24"
+                                   FontAttributes="Bold" />
+                        </VerticalStackLayout>
+                    </Border>
                 </Grid>
 
                 <!-- Navigation -->
@@ -107,6 +121,13 @@
 
                 <Button Text="🔧  Manage Problems"
                         Command="{Binding NavigateToProblemsCommand}"
+                        HeightRequest="50"
+                        CornerRadius="10"
+                        FontSize="16"
+                        HorizontalOptions="Fill" />
+
+                <Button Text="🚗  Manage Cars"
+                        Command="{Binding NavigateToCarsCommand}"
                         HeightRequest="50"
                         CornerRadius="10"
                         FontSize="16"
