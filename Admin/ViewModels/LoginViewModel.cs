@@ -50,7 +50,7 @@ public partial class LoginViewModel : ObservableObject
 
             await _apiClient.LoginAsync(request);
 
-            await Shell.Current.GoToAsync("//Main/Dashboard");
+            await Shell.Current.GoToAsync("//Dashboard/DashboardPage");
         }
         catch (ApiException ex)
         {

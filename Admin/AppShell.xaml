@@ -4,43 +4,62 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:views="clr-namespace:Admin.Views"
-    Title="OnlyFix Admin">
+    Title="OnlyFix Admin"
+    FlyoutBehavior="Disabled"
+    FlyoutBackgroundColor="{AppThemeBinding Light=#F5F5F5, Dark=#1E1E1E}">
 
-    <!-- Login (no tabs/flyout) -->
-    <TabBar Route="Login">
-        <ShellContent
-            Route="LoginPage"
-            ContentTemplate="{DataTemplate views:LoginPage}"
-            Shell.NavBarIsVisible="False"
-            Shell.TabBarIsVisible="False" />
-    </TabBar>
+    <!-- Login (no flyout) -->
+    <ShellContent
+        Route="LoginPage"
+        ContentTemplate="{DataTemplate views:LoginPage}"
+        Shell.NavBarIsVisible="False"
+        Shell.FlyoutItemIsVisible="False"
+        FlyoutItemIsVisible="False" />
 
-    <!-- Main tabs after login -->
-    <TabBar Route="Main">
+    <!-- Main sections — flyout sidebar -->
+    <FlyoutItem Title="Dashboard" Route="Dashboard">
+        <FlyoutItem.Icon>
+            <FontImageSource Glyph="&#x1F3E0;" FontFamily="Arial" Size="20" />
+        </FlyoutItem.Icon>
         <ShellContent
-            Route="Dashboard"
-            Title="Dashboard"
+            Route="DashboardPage"
             ContentTemplate="{DataTemplate views:DashboardPage}" />
+    </FlyoutItem>
 
+    <FlyoutItem Title="Users" Route="Users">
+        <FlyoutItem.Icon>
+            <FontImageSource Glyph="&#x1F465;" FontFamily="Arial" Size="20" />
+        </FlyoutItem.Icon>
         <ShellContent
-            Route="Users"
-            Title="Users"
+            Route="UsersPage"
             ContentTemplate="{DataTemplate views:UsersPage}" />
+    </FlyoutItem>
 
+    <FlyoutItem Title="Cars" Route="Cars">
+        <FlyoutItem.Icon>
+            <FontImageSource Glyph="&#x1F697;" FontFamily="Arial" Size="20" />
+        </FlyoutItem.Icon>
         <ShellContent
-            Route="Problems"
-            Title="Problems"
-            ContentTemplate="{DataTemplate views:ProblemsPage}" />
-
-        <ShellContent
-            Route="Cars"
-            Title="Cars"
+            Route="CarsPage"
             ContentTemplate="{DataTemplate views:CarsPage}" />
+    </FlyoutItem>
 
+    <FlyoutItem Title="Problems" Route="Problems">
+        <FlyoutItem.Icon>
+            <FontImageSource Glyph="&#x26A0;" FontFamily="Arial" Size="20" />
+        </FlyoutItem.Icon>
         <ShellContent
-            Route="Tickets"
-            Title="Tickets"
+            Route="ProblemsPage"
+            ContentTemplate="{DataTemplate views:ProblemsPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Tickets" Route="Tickets">
+        <FlyoutItem.Icon>
+            <FontImageSource Glyph="&#x1F3AB;" FontFamily="Arial" Size="20" />
+        </FlyoutItem.Icon>
+        <ShellContent
+            Route="TicketsPage"
             ContentTemplate="{DataTemplate views:TicketsPage}" />
-    </TabBar>
+    </FlyoutItem>
 
 </Shell>

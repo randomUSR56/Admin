@@ -62,7 +62,7 @@ public partial class CarsViewModel : ObservableObject
         catch (ApiException ex) when (ex.IsUnauthorized)
         {
             _tokenStore.Clear();
-            await Shell.Current.GoToAsync("//Login/LoginPage");
+            await Shell.Current.GoToAsync("//LoginPage");
         }
         catch (Exception ex)
         {
