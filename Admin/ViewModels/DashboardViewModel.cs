@@ -35,6 +35,9 @@ public partial class DashboardViewModel : ObservableObject
     [ObservableProperty]
     private int _totalUsers;
 
+    [ObservableProperty]
+    private int _totalProblems;
+
     [RelayCommand]
     private async Task LoadDataAsync()
     {
@@ -51,6 +54,9 @@ public partial class DashboardViewModel : ObservableObject
 
             var users = await _apiClient.GetUsersAsync();
             TotalUsers = users.Total;
+
+            var problems = await _apiClient.GetProblemsAsync();
+            TotalProblems = problems.Total;
         }
         catch (ApiException ex) when (ex.IsUnauthorized)
         {
@@ -72,6 +78,12 @@ public partial class DashboardViewModel : ObservableObject
     private async Task NavigateToUsersAsync()
     {
         await Shell.Current.GoToAsync("//Main/Users");
+    }
+
+    [RelayCommand]
+    private async Task NavigateToProblemsAsync()
+    {
+        await Shell.Current.GoToAsync("//Main/Problems");
     }
 
     [RelayCommand]
