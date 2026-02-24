@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Admin.ViewModels"
+             xmlns:models="clr-namespace:Admin.Models"
+             x:Class="Admin.Views.ProblemsPage"
+             x:DataType="vm:ProblemsViewModel"
+             Title="Problems">
+
+    <Grid RowDefinitions="Auto,*,Auto" Padding="20" RowSpacing="12">
+
+        <!-- Search & Filter Bar -->
+        <Grid Grid.Row="0"
+              ColumnDefinitions="*,Auto,Auto,Auto,Auto"
+              ColumnSpacing="10">
+            <Entry Text="{Binding SearchText}"
+                   Placeholder="Search problems..."
+                   ReturnCommand="{Binding SearchCommand}"
+                   ClearButtonVisibility="WhileEditing" />
+
+            <Picker Grid.Column="1"
+                    ItemsSource="{Binding AvailableCategories}"
+                    SelectedItem="{Binding SelectedCategory}"
+                    Title="Category"
+                    WidthRequest="140" />
+
+            <Picker Grid.Column="2"
+                    ItemsSource="{Binding ActiveFilters}"
+                    SelectedItem="{Binding SelectedActiveFilter}"
+                    Title="Status"
+                    WidthRequest="110" />
+
+            <Button Grid.Column="3"
+                    Text="Search"
+                    Command="{Binding SearchCommand}"
+                    HeightRequest="40"
+                    CornerRadius="6"
+                    FontSize="13" />
+
+            <Button Grid.Column="4"
+                    Text="+ New Problem"
+                    Command="{Binding CreateProblemCommand}"
+                    HeightRequest="40"
+                    CornerRadius="6"
+                    FontSize="13"
+                    BackgroundColor="{StaticResource Primary}" />
+        </Grid>
+
+        <!-- Error -->
+        <Border Grid.Row="1"
+                Stroke="{StaticResource Red100Accent}"
+                BackgroundColor="#33FF0000"
+                StrokeShape="RoundRectangle 8"
+                Padding="12"
+                IsVisible="{Binding HasError}"
+                VerticalOptions="Start">
+            <Label Text="{Binding ErrorMessage}"
+                   TextColor="{StaticResource Red100Accent}"
+                   FontSize="13" />
+        </Border>
+
+        <!-- Problems List -->
+        <CollectionView Grid.Row="1"
+                        ItemsSource="{Binding Problems}"
+                        IsVisible="{Binding HasError, Converter={StaticResource InvertBoolConverter}}">
+            <CollectionView.EmptyView>
+                <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="8">
+                    <Label Text="No problems found"
+                           FontSize="16"
+                           HorizontalTextAlignment="Center"
+                           TextColor="{StaticResource Gray400}" />
+                </VerticalStackLayout>
+            </CollectionView.EmptyView>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:Problem">
+                    <Border StrokeShape="RoundRectangle 8"
+                            Padding="14"
+                            Margin="0,4"
+                            BackgroundColor="{StaticResource Gray900}">
+                        <Grid ColumnDefinitions="Auto,*,Auto,Auto" ColumnSpacing="12">
+
+                            <!-- Active indicator dot -->
+                            <Ellipse Grid.Column="0"
+                                     WidthRequest="10"
+                                     HeightRequest="10"
+                                     VerticalOptions="Center"
+                                     Fill="{Binding IsActive, Converter={StaticResource BoolToColorConverter}}" />
+
+                            <VerticalStackLayout Grid.Column="1" Spacing="4">
+                                <Label Text="{Binding Name}"
+                                       FontSize="15"
+                                       FontAttributes="Bold" />
+                                <HorizontalStackLayout Spacing="8">
+                                    <Border StrokeShape="RoundRectangle 4"
+                                            Padding="6,2"
+                                            BackgroundColor="{Binding Category, Converter={StaticResource CategoryColorConverter}}"
+                                            StrokeThickness="0">
+                                        <Label Text="{Binding Category}"
+                                               FontSize="11"
+                                               TextColor="White" />
+                                    </Border>
+                                    <Label Text="{Binding ActiveDisplay}"
+                                           FontSize="12"
+                                           TextColor="{Binding IsActive, Converter={StaticResource BoolToColorConverter}}"
+                                           VerticalOptions="Center" />
+                                </HorizontalStackLayout>
+                                <Label Text="{Binding Description}"
+                                       FontSize="12"
+                                       TextColor="{StaticResource Gray400}"
+                                       MaxLines="2"
+                                       LineBreakMode="TailTruncation" />
+                            </VerticalStackLayout>
+
+                            <Button Grid.Column="2"
+                                    Text="Edit"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ProblemsViewModel}}, Path=ViewProblemCommand}"
+                                    CommandParameter="{Binding .}"
+                                    HeightRequest="34"
+                                    CornerRadius="6"
+                                    FontSize="12"
+                                    Padding="12,0"
+                                    VerticalOptions="Center" />
+
+                            <Button Grid.Column="3"
+                                    Text="Delete"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ProblemsViewModel}}, Path=DeleteProblemCommand}"
+                                    CommandParameter="{Binding .}"
+                                    BackgroundColor="{StaticResource Red100Accent}"
+                                    HeightRequest="34"
+                                    CornerRadius="6"
+                                    FontSize="12"
+                                    Padding="12,0"
+                                    VerticalOptions="Center" />
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!-- Loading -->
+        <ActivityIndicator Grid.Row="1"
+                           IsRunning="{Binding IsBusy}"
+                           IsVisible="{Binding IsBusy}"
+                           Color="{StaticResource Primary}"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center" />
+
+        <!-- Pagination -->
+        <Grid Grid.Row="2"
+              ColumnDefinitions="Auto,*,Auto"
+              Padding="0,8,0,0">
+            <Button Text="← Previous"
+                    Command="{Binding PreviousPageCommand}"
+                    FontSize="13"
+                    HeightRequest="36"
+                    CornerRadius="6"
+                    BackgroundColor="{StaticResource Gray600}" />
+
+            <Label Grid.Column="1"
+                   HorizontalTextAlignment="Center"
+                   VerticalOptions="Center"
+                   FontSize="13">
+                <Label.Text>
+                    <MultiBinding StringFormat="Page {0} of {1} ({2} total problems)">
+                        <Binding Path="CurrentPage" />
+                        <Binding Path="LastPage" />
+                        <Binding Path="TotalProblems" />
+                    </MultiBinding>
+                </Label.Text>
+            </Label>
+
+            <Button Grid.Column="2"
+                    Text="Next →"
+                    Command="{Binding NextPageCommand}"
+                    FontSize="13"
+                    HeightRequest="36"
+                    CornerRadius="6"
+                    BackgroundColor="{StaticResource Gray600}" />
+        </Grid>
+    </Grid>
+</ContentPage>

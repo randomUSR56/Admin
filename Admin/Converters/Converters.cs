@@ -61,3 +61,42 @@ public class StatusTextConverter : IValueConverter
     public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
         => throw new NotSupportedException();
 }
+
+public class BoolToColorConverter : IValueConverter
+{
+    public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+    {
+        if (value is bool isActive)
+            return isActive ? Colors.SeaGreen : Colors.Gray;
+        return Colors.Gray;
+    }
+
+    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+        => throw new NotSupportedException();
+}
+
+public class CategoryColorConverter : IValueConverter
+{
+    public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+    {
+        if (value is string category)
+        {
+            return category.ToLowerInvariant() switch
+            {
+                "engine" => Colors.OrangeRed,
+                "transmission" => Colors.MediumPurple,
+                "electrical" => Colors.Gold,
+                "brakes" => Colors.Crimson,
+                "suspension" => Colors.DodgerBlue,
+                "steering" => Colors.Teal,
+                "body" => Colors.SteelBlue,
+                "other" => Colors.DarkGray,
+                _ => Colors.LightGray
+            };
+        }
+        return Colors.LightGray;
+    }
+
+    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+        => throw new NotSupportedException();
+}
