@@ -6,6 +6,10 @@
              x:DataType="vm:ProblemDetailViewModel"
              Title="{Binding PageTitle}">
 
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior IsVisible="True" IsEnabled="True" />
+    </Shell.BackButtonBehavior>
+
     <ScrollView Padding="20">
         <VerticalStackLayout Spacing="16"
                              MaximumWidthRequest="500"
