@@ -21,6 +21,8 @@
     <Compile Include="../Admin/Models/Problem.cs" Link="Models/Problem.cs" />
     <Compile Include="../Admin/Models/ProblemRequests.cs" Link="Models/ProblemRequests.cs" />
     <Compile Include="../Admin/Models/ProblemStatistics.cs" Link="Models/ProblemStatistics.cs" />
+    <Compile Include="../Admin/Models/Car.cs" Link="Models/Car.cs" />
+    <Compile Include="../Admin/Models/CarRequests.cs" Link="Models/CarRequests.cs" />
     <Compile Include="../Admin/Models/PaginatedResponse.cs" Link="Models/PaginatedResponse.cs" />
     <Compile Include="../Admin/Models/AuthModels.cs" Link="Models/AuthModels.cs" />
     <Compile Include="../Admin/Models/User.cs" Link="Models/User.cs" />

@@ -10,6 +10,7 @@ namespace Admin
 
             Routing.RegisterRoute("UserDetail", typeof(UserDetailPage));
             Routing.RegisterRoute("ProblemDetail", typeof(ProblemDetailPage));
+            Routing.RegisterRoute("CarDetail", typeof(CarDetailPage));
         }
     }
 }

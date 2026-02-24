@@ -24,6 +24,13 @@ public interface IApiClient
     Task DeleteProblemAsync(int id);
     Task<ProblemStatistics> GetProblemStatisticsAsync();
 
+    // Cars
+    Task<PaginatedResponse<Car>> GetCarsAsync(int page = 1, int? userId = null, string? search = null);
+    Task<Car> GetCarAsync(int id);
+    Task<Car> CreateCarAsync(CreateCarRequest request);
+    Task UpdateCarAsync(int id, UpdateCarRequest request);
+    Task DeleteCarAsync(int id);
+
     // Health
     Task<bool> HealthCheckAsync();
 }
