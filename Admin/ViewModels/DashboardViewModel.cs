@@ -41,6 +41,9 @@ public partial class DashboardViewModel : ObservableObject
     [ObservableProperty]
     private int _totalCars;
 
+    [ObservableProperty]
+    private int _totalTickets;
+
     [RelayCommand]
     private async Task LoadDataAsync()
     {
@@ -63,6 +66,9 @@ public partial class DashboardViewModel : ObservableObject
 
             var cars = await _apiClient.GetCarsAsync();
             TotalCars = cars.Total;
+
+            var tickets = await _apiClient.GetTicketsAsync();
+            TotalTickets = tickets.Total;
         }
         catch (ApiException ex) when (ex.IsUnauthorized)
         {
@@ -96,6 +102,12 @@ public partial class DashboardViewModel : ObservableObject
     private async Task NavigateToCarsAsync()
     {
         await Shell.Current.GoToAsync("//Main/Cars");
+    }
+
+    [RelayCommand]
+    private async Task NavigateToTicketsAsync()
+    {
+        await Shell.Current.GoToAsync("//Main/Tickets");
     }
 
     [RelayCommand]
