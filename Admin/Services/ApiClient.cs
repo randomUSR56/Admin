@@ -269,6 +269,150 @@ public class ApiClient : IApiClient
         await EnsureSuccessAsync(response);
     }
 
+    // --- Tickets ---
+
+    public async Task<PaginatedResponse<Ticket>> GetTicketsAsync(
+        int page = 1, string? status = null, string? priority = null,
+        int? mechanicId = null, int? userId = null, int? carId = null)
+    {
+        await SetAuthHeaderAsync();
+
+        var query = $"/api/tickets?page={page}";
+        if (!string.IsNullOrEmpty(status))
+            query += $"&status={Uri.EscapeDataString(status)}";
+        if (!string.IsNullOrEmpty(priority))
+            query += $"&priority={Uri.EscapeDataString(priority)}";
+        if (mechanicId.HasValue)
+            query += $"&mechanic_id={mechanicId.Value}";
+        if (userId.HasValue)
+            query += $"&user_id={userId.Value}";
+        if (carId.HasValue)
+            query += $"&car_id={carId.Value}";
+
+        var response = await _httpClient.GetAsync(query);
+        await EnsureSuccessAsync(response);
+
+        return await response.Content.ReadFromJsonAsync<PaginatedResponse<Ticket>>(JsonOptions)
+            ?? throw new ApiException("Invalid response", (int)response.StatusCode);
+    }
+
+    public async Task<Ticket> GetTicketAsync(int id)
+    {
+        await SetAuthHeaderAsync();
+        var response = await _httpClient.GetAsync($"/api/tickets/{id}");
+        await EnsureSuccessAsync(response);
+        return await response.Content.ReadFromJsonAsync<Ticket>(JsonOptions)
+            ?? throw new ApiException("Invalid response", (int)response.StatusCode);
+    }
+
+    public async Task<Ticket> CreateTicketAsync(CreateTicketRequest request)
+    {
+        await SetAuthHeaderAsync();
+        var response = await _httpClient.PostAsJsonAsync("/api/tickets", request);
+        await EnsureSuccessAsync(response);
+
+        var wrapper = await response.Content.ReadFromJsonAsync<JsonElement>(JsonOptions);
+        if (wrapper.TryGetProperty("data", out var dataElement))
+        {
+            return JsonSerializer.Deserialize<Ticket>(dataElement.GetRawText(), JsonOptions)
+                ?? throw new ApiException("Invalid response", (int)response.StatusCode);
+        }
+
+        return JsonSerializer.Deserialize<Ticket>(wrapper.GetRawText(), JsonOptions)
+            ?? throw new ApiException("Invalid response", (int)response.StatusCode);
+    }
+
+    public async Task UpdateTicketAsync(int id, UpdateTicketRequest request)
+    {
+        await SetAuthHeaderAsync();
+        var response = await _httpClient.PutAsJsonAsync($"/api/tickets/{id}", request);
+        await EnsureSuccessAsync(response);
+    }
+
+    public async Task DeleteTicketAsync(int id)
+    {
+        await SetAuthHeaderAsync();
+        var response = await _httpClient.DeleteAsync($"/api/tickets/{id}");
+        await EnsureSuccessAsync(response);
+    }
+
+    public async Task<Ticket> AcceptTicketAsync(int id)
+    {
+        await SetAuthHeaderAsync();
+        var response = await _httpClient.PostAsync($"/api/tickets/{id}/accept", null);
+        await EnsureSuccessAsync(response);
+
+        var wrapper = await response.Content.ReadFromJsonAsync<JsonElement>(JsonOptions);
+        if (wrapper.TryGetProperty("data", out var dataElement))
+        {
+            return JsonSerializer.Deserialize<Ticket>(dataElement.GetRawText(), JsonOptions)
+                ?? throw new ApiException("Invalid response", (int)response.StatusCode);
+        }
+
+        return JsonSerializer.Deserialize<Ticket>(wrapper.GetRawText(), JsonOptions)
+            ?? throw new ApiException("Invalid response", (int)response.StatusCode);
+    }
+
+    public async Task<Ticket> StartTicketAsync(int id)
+    {
+        await SetAuthHeaderAsync();
+        var response = await _httpClient.PostAsync($"/api/tickets/{id}/start", null);
+        await EnsureSuccessAsync(response);
+
+        var wrapper = await response.Content.ReadFromJsonAsync<JsonElement>(JsonOptions);
+        if (wrapper.TryGetProperty("data", out var dataElement))
+        {
+            return JsonSerializer.Deserialize<Ticket>(dataElement.GetRawText(), JsonOptions)
+                ?? throw new ApiException("Invalid response", (int)response.StatusCode);
+        }
+
+        return JsonSerializer.Deserialize<Ticket>(wrapper.GetRawText(), JsonOptions)
+            ?? throw new ApiException("Invalid response", (int)response.StatusCode);
+    }
+
+    public async Task<Ticket> CompleteTicketAsync(int id)
+    {
+        await SetAuthHeaderAsync();
+        var response = await _httpClient.PostAsync($"/api/tickets/{id}/complete", null);
+        await EnsureSuccessAsync(response);
+
+        var wrapper = await response.Content.ReadFromJsonAsync<JsonElement>(JsonOptions);
+        if (wrapper.TryGetProperty("data", out var dataElement))
+        {
+            return JsonSerializer.Deserialize<Ticket>(dataElement.GetRawText(), JsonOptions)
+                ?? throw new ApiException("Invalid response", (int)response.StatusCode);
+        }
+
+        return JsonSerializer.Deserialize<Ticket>(wrapper.GetRawText(), JsonOptions)
+            ?? throw new ApiException("Invalid response", (int)response.StatusCode);
+    }
+
+    public async Task<Ticket> CloseTicketAsync(int id)
+    {
+        await SetAuthHeaderAsync();
+        var response = await _httpClient.PostAsync($"/api/tickets/{id}/close", null);
+        await EnsureSuccessAsync(response);
+
+        var wrapper = await response.Content.ReadFromJsonAsync<JsonElement>(JsonOptions);
+        if (wrapper.TryGetProperty("data", out var dataElement))
+        {
+            return JsonSerializer.Deserialize<Ticket>(dataElement.GetRawText(), JsonOptions)
+                ?? throw new ApiException("Invalid response", (int)response.StatusCode);
+        }
+
+        return JsonSerializer.Deserialize<Ticket>(wrapper.GetRawText(), JsonOptions)
+            ?? throw new ApiException("Invalid response", (int)response.StatusCode);
+    }
+
+    public async Task<TicketStatistics> GetTicketStatisticsAsync()
+    {
+        await SetAuthHeaderAsync();
+        var response = await _httpClient.GetAsync("/api/tickets/statistics");
+        await EnsureSuccessAsync(response);
+        return await response.Content.ReadFromJsonAsync<TicketStatistics>(JsonOptions)
+            ?? throw new ApiException("Invalid response", (int)response.StatusCode);
+    }
+
     // --- Health ---
 
     public async Task<bool> HealthCheckAsync()

@@ -31,6 +31,18 @@ public interface IApiClient
     Task UpdateCarAsync(int id, UpdateCarRequest request);
     Task DeleteCarAsync(int id);
 
+    // Tickets
+    Task<PaginatedResponse<Ticket>> GetTicketsAsync(int page = 1, string? status = null, string? priority = null, int? mechanicId = null, int? userId = null, int? carId = null);
+    Task<Ticket> GetTicketAsync(int id);
+    Task<Ticket> CreateTicketAsync(CreateTicketRequest request);
+    Task UpdateTicketAsync(int id, UpdateTicketRequest request);
+    Task DeleteTicketAsync(int id);
+    Task<Ticket> AcceptTicketAsync(int id);
+    Task<Ticket> StartTicketAsync(int id);
+    Task<Ticket> CompleteTicketAsync(int id);
+    Task<Ticket> CloseTicketAsync(int id);
+    Task<TicketStatistics> GetTicketStatisticsAsync();
+
     // Health
     Task<bool> HealthCheckAsync();
 }

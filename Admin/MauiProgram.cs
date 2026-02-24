@@ -37,6 +37,8 @@ namespace Admin
             builder.Services.AddTransient<ProblemDetailViewModel>();
             builder.Services.AddTransient<CarsViewModel>();
             builder.Services.AddTransient<CarDetailViewModel>();
+            builder.Services.AddTransient<TicketsViewModel>();
+            builder.Services.AddTransient<TicketDetailViewModel>();
 
             // Pages
             builder.Services.AddTransient<LoginPage>();
@@ -47,6 +49,8 @@ namespace Admin
             builder.Services.AddTransient<ProblemDetailPage>();
             builder.Services.AddTransient<CarsPage>();
             builder.Services.AddTransient<CarDetailPage>();
+            builder.Services.AddTransient<TicketsPage>();
+            builder.Services.AddTransient<TicketDetailPage>();
 
 #if DEBUG
             builder.Logging.AddDebug();
