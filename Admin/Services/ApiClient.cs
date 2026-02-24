@@ -139,6 +139,77 @@ public class ApiClient
         await EnsureSuccessAsync(response);
     }
 
+    // --- Problems ---
+
+    public async Task<PaginatedResponse<Problem>> GetProblemsAsync(
+        int page = 1, string? category = null, bool? isActive = null, string? search = null)
+    {
+        await SetAuthHeaderAsync();
+
+        var query = $"/api/problems?page={page}";
+        if (!string.IsNullOrEmpty(category))
+            query += $"&category={Uri.EscapeDataString(category)}";
+        if (isActive.HasValue)
+            query += $"&is_active={isActive.Value.ToString().ToLowerInvariant()}";
+        if (!string.IsNullOrEmpty(search))
+            query += $"&search={Uri.EscapeDataString(search)}";
+
+        var response = await _httpClient.GetAsync(query);
+        await EnsureSuccessAsync(response);
+
+        return await response.Content.ReadFromJsonAsync<PaginatedResponse<Problem>>(JsonOptions)
+            ?? throw new ApiException("Invalid response", (int)response.StatusCode);
+    }
+
+    public async Task<Problem> GetProblemAsync(int id)
+    {
+        await SetAuthHeaderAsync();
+        var response = await _httpClient.GetAsync($"/api/problems/{id}");
+        await EnsureSuccessAsync(response);
+        return await response.Content.ReadFromJsonAsync<Problem>(JsonOptions)
+            ?? throw new ApiException("Invalid response", (int)response.StatusCode);
+    }
+
+    public async Task<Problem> CreateProblemAsync(CreateProblemRequest request)
+    {
+        await SetAuthHeaderAsync();
+        var response = await _httpClient.PostAsJsonAsync("/api/problems", request);
+        await EnsureSuccessAsync(response);
+
+        var wrapper = await response.Content.ReadFromJsonAsync<JsonElement>(JsonOptions);
+        if (wrapper.TryGetProperty("data", out var dataElement))
+        {
+            return JsonSerializer.Deserialize<Problem>(dataElement.GetRawText(), JsonOptions)
+                ?? throw new ApiException("Invalid response", (int)response.StatusCode);
+        }
+
+        return JsonSerializer.Deserialize<Problem>(wrapper.GetRawText(), JsonOptions)
+            ?? throw new ApiException("Invalid response", (int)response.StatusCode);
+    }
+
+    public async Task UpdateProblemAsync(int id, UpdateProblemRequest request)
+    {
+        await SetAuthHeaderAsync();
+        var response = await _httpClient.PutAsJsonAsync($"/api/problems/{id}", request);
+        await EnsureSuccessAsync(response);
+    }
+
+    public async Task DeleteProblemAsync(int id)
+    {
+        await SetAuthHeaderAsync();
+        var response = await _httpClient.DeleteAsync($"/api/problems/{id}");
+        await EnsureSuccessAsync(response);
+    }
+
+    public async Task<ProblemStatistics> GetProblemStatisticsAsync()
+    {
+        await SetAuthHeaderAsync();
+        var response = await _httpClient.GetAsync("/api/problems/statistics");
+        await EnsureSuccessAsync(response);
+        return await response.Content.ReadFromJsonAsync<ProblemStatistics>(JsonOptions)
+            ?? throw new ApiException("Invalid response", (int)response.StatusCode);
+    }
+
     // --- Health ---
 
     public async Task<bool> HealthCheckAsync()
