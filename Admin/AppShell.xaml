@@ -18,45 +18,30 @@
 
     <!-- Main sections — flyout sidebar -->
     <FlyoutItem Title="Dashboard" Route="Dashboard">
-        <FlyoutItem.Icon>
-            <FontImageSource Glyph="&#x1F3E0;" FontFamily="Arial" Size="20" />
-        </FlyoutItem.Icon>
         <ShellContent
             Route="DashboardPage"
             ContentTemplate="{DataTemplate views:DashboardPage}" />
     </FlyoutItem>
 
     <FlyoutItem Title="Users" Route="Users">
-        <FlyoutItem.Icon>
-            <FontImageSource Glyph="&#x1F465;" FontFamily="Arial" Size="20" />
-        </FlyoutItem.Icon>
         <ShellContent
             Route="UsersPage"
             ContentTemplate="{DataTemplate views:UsersPage}" />
     </FlyoutItem>
 
     <FlyoutItem Title="Cars" Route="Cars">
-        <FlyoutItem.Icon>
-            <FontImageSource Glyph="&#x1F697;" FontFamily="Arial" Size="20" />
-        </FlyoutItem.Icon>
         <ShellContent
             Route="CarsPage"
             ContentTemplate="{DataTemplate views:CarsPage}" />
     </FlyoutItem>
 
     <FlyoutItem Title="Problems" Route="Problems">
-        <FlyoutItem.Icon>
-            <FontImageSource Glyph="&#x26A0;" FontFamily="Arial" Size="20" />
-        </FlyoutItem.Icon>
         <ShellContent
             Route="ProblemsPage"
             ContentTemplate="{DataTemplate views:ProblemsPage}" />
     </FlyoutItem>
 
     <FlyoutItem Title="Tickets" Route="Tickets">
-        <FlyoutItem.Icon>
-            <FontImageSource Glyph="&#x1F3AB;" FontFamily="Arial" Size="20" />
-        </FlyoutItem.Icon>
         <ShellContent
             Route="TicketsPage"
             ContentTemplate="{DataTemplate views:TicketsPage}" />
