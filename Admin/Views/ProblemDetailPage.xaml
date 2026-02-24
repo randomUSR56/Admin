@@ -6,6 +6,14 @@
              x:DataType="vm:ProblemDetailViewModel"
              Title="{Binding PageTitle}">
 
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior IsVisible="True" IsEnabled="True" TextOverride="Back" />
+    </Shell.BackButtonBehavior>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="← Back" Clicked="OnBackClicked" />
+    </ContentPage.ToolbarItems>
+
     <ScrollView Padding="20">
         <VerticalStackLayout Spacing="16"
                              MaximumWidthRequest="500"

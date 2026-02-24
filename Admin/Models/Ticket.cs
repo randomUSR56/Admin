@@ -75,4 +75,10 @@ public class Ticket
     public string MechanicDisplay => Mechanic?.Name ?? (MechanicId.HasValue ? $"Mechanic #{MechanicId}" : "Unassigned");
 
     public string CarDisplay => Car?.DisplayName ?? $"Car #{CarId}";
+
+    // Status-aware workflow flags (controls which action buttons are valid)
+    public bool CanAccept => Status == "open";
+    public bool CanStart => Status == "assigned";
+    public bool CanComplete => Status == "in_progress";
+    public bool CanClose => Status is not "closed" and not "completed";
 }

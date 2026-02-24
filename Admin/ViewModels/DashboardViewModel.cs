@@ -73,7 +73,7 @@ public partial class DashboardViewModel : ObservableObject
         catch (ApiException ex) when (ex.IsUnauthorized)
         {
             _tokenStore.Clear();
-            await Shell.Current.GoToAsync("//Login/LoginPage");
+            await Shell.Current.GoToAsync("//LoginPage");
         }
         catch (Exception ex)
         {
@@ -89,25 +89,25 @@ public partial class DashboardViewModel : ObservableObject
     [RelayCommand]
     private async Task NavigateToUsersAsync()
     {
-        await Shell.Current.GoToAsync("//Main/Users");
+        await Shell.Current.GoToAsync("//Users/UsersPage");
     }
 
     [RelayCommand]
     private async Task NavigateToProblemsAsync()
     {
-        await Shell.Current.GoToAsync("//Main/Problems");
+        await Shell.Current.GoToAsync("//Problems/ProblemsPage");
     }
 
     [RelayCommand]
     private async Task NavigateToCarsAsync()
     {
-        await Shell.Current.GoToAsync("//Main/Cars");
+        await Shell.Current.GoToAsync("//Cars/CarsPage");
     }
 
     [RelayCommand]
     private async Task NavigateToTicketsAsync()
     {
-        await Shell.Current.GoToAsync("//Main/Tickets");
+        await Shell.Current.GoToAsync("//Tickets/TicketsPage");
     }
 
     [RelayCommand]
@@ -126,7 +126,7 @@ public partial class DashboardViewModel : ObservableObject
         finally
         {
             IsBusy = false;
-            await Shell.Current.GoToAsync("//Login/LoginPage");
+            await Shell.Current.GoToAsync("//LoginPage");
         }
     }
 }
