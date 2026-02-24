@@ -111,7 +111,7 @@ public partial class UsersViewModel : ObservableObject
     [RelayCommand]
     private async Task DeleteUserAsync(User user)
     {
-        bool confirm = await Shell.Current.DisplayAlert(
+        bool confirm = await Shell.Current.DisplayAlertAsync(
             "Confirm Delete",
             $"Are you sure you want to delete {user.Name}?",
             "Delete", "Cancel");
@@ -127,7 +127,7 @@ public partial class UsersViewModel : ObservableObject
         }
         catch (ApiException ex)
         {
-            await Shell.Current.DisplayAlert("Error", ex.Message, "OK");
+            await Shell.Current.DisplayAlertAsync("Error", ex.Message, "OK");
         }
         finally
         {

@@ -124,7 +124,7 @@ public partial class ProblemsViewModel : ObservableObject
     [RelayCommand]
     private async Task DeleteProblemAsync(Problem problem)
     {
-        bool confirm = await Shell.Current.DisplayAlert(
+        bool confirm = await Shell.Current.DisplayAlertAsync(
             "Confirm Delete",
             $"Are you sure you want to delete \"{problem.Name}\"?",
             "Delete", "Cancel");
@@ -140,7 +140,7 @@ public partial class ProblemsViewModel : ObservableObject
         }
         catch (ApiException ex)
         {
-            await Shell.Current.DisplayAlert("Error", ex.Message, "OK");
+            await Shell.Current.DisplayAlertAsync("Error", ex.Message, "OK");
         }
         finally
         {
