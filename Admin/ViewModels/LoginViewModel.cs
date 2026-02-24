@@ -7,9 +7,9 @@ namespace Admin.ViewModels;
 
 public partial class LoginViewModel : ObservableObject
 {
-    private readonly ApiClient _apiClient;
+    private readonly IApiClient _apiClient;
 
-    public LoginViewModel(ApiClient apiClient)
+    public LoginViewModel(IApiClient apiClient)
     {
         _apiClient = apiClient;
     }

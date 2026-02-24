@@ -8,9 +8,9 @@ namespace Admin.ViewModels;
 [QueryProperty(nameof(UserId), "userId")]
 public partial class UserDetailViewModel : ObservableObject
 {
-    private readonly ApiClient _apiClient;
+    private readonly IApiClient _apiClient;
 
-    public UserDetailViewModel(ApiClient apiClient)
+    public UserDetailViewModel(IApiClient apiClient)
     {
         _apiClient = apiClient;
     }

@@ -8,10 +8,10 @@ namespace Admin.ViewModels;
 
 public partial class DashboardViewModel : ObservableObject
 {
-    private readonly ApiClient _apiClient;
+    private readonly IApiClient _apiClient;
     private readonly AuthTokenStore _tokenStore;
 
-    public DashboardViewModel(ApiClient apiClient, AuthTokenStore tokenStore)
+    public DashboardViewModel(IApiClient apiClient, AuthTokenStore tokenStore)
     {
         _apiClient = apiClient;
         _tokenStore = tokenStore;

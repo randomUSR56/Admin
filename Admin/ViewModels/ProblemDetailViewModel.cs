@@ -8,9 +8,9 @@ namespace Admin.ViewModels;
 [QueryProperty(nameof(ProblemId), "problemId")]
 public partial class ProblemDetailViewModel : ObservableObject
 {
-    private readonly ApiClient _apiClient;
+    private readonly IApiClient _apiClient;
 
-    public ProblemDetailViewModel(ApiClient apiClient)
+    public ProblemDetailViewModel(IApiClient apiClient)
     {
         _apiClient = apiClient;
     }

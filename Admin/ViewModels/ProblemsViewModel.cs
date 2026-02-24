@@ -8,10 +8,10 @@ namespace Admin.ViewModels;
 
 public partial class ProblemsViewModel : ObservableObject
 {
-    private readonly ApiClient _apiClient;
+    private readonly IApiClient _apiClient;
     private readonly AuthTokenStore _tokenStore;
 
-    public ProblemsViewModel(ApiClient apiClient, AuthTokenStore tokenStore)
+    public ProblemsViewModel(IApiClient apiClient, AuthTokenStore tokenStore)
     {
         _apiClient = apiClient;
         _tokenStore = tokenStore;

@@ -21,7 +21,7 @@ namespace Admin
             // Services
             builder.Services.AddSingleton<AuthTokenStore>();
 
-            builder.Services.AddHttpClient<ApiClient>(client =>
+            builder.Services.AddHttpClient<IApiClient, ApiClient>(client =>
             {
                 // TODO: Update this to your Laravel backend URL
                 client.BaseAddress = new Uri("http://onlyfix.local");

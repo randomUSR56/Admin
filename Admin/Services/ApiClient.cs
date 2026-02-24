@@ -5,7 +5,7 @@ using Admin.Models;
 
 namespace Admin.Services;
 
-public class ApiClient
+public class ApiClient : IApiClient
 {
     private readonly HttpClient _httpClient;
     private readonly AuthTokenStore _tokenStore;
