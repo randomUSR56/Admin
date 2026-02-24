@@ -5,7 +5,7 @@
              x:Class="Admin.Views.LoginPage"
              x:DataType="vm:LoginViewModel"
              Shell.NavBarIsVisible="False"
-             BackgroundColor="{StaticResource Gray950}">
+             BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray950}}">
 
     <Grid RowDefinitions="*,Auto,*"
           Padding="30">

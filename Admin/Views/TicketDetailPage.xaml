@@ -7,6 +7,10 @@
              x:DataType="vm:TicketDetailViewModel"
              Title="{Binding PageTitle}">
 
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior IsVisible="True" IsEnabled="True" />
+    </Shell.BackButtonBehavior>
+
     <ScrollView Padding="20">
         <VerticalStackLayout Spacing="16"
                              MaximumWidthRequest="600"
@@ -26,7 +30,7 @@
             <!-- Info section for existing tickets -->
             <Border StrokeShape="RoundRectangle 8"
                     Padding="14"
-                    BackgroundColor="{StaticResource Gray900}"
+                    BackgroundColor="{AppThemeBinding Light=#F5F5F5, Dark=#212121}"
                     IsVisible="{Binding IsExistingTicket}">
                 <VerticalStackLayout Spacing="6">
                     <Label Text="Ticket Info" FontSize="15" FontAttributes="Bold" />
@@ -40,7 +44,7 @@
             <!-- Attached problems for existing tickets -->
             <Border StrokeShape="RoundRectangle 8"
                     Padding="14"
-                    BackgroundColor="{StaticResource Gray900}"
+                    BackgroundColor="{AppThemeBinding Light=#F5F5F5, Dark=#212121}"
                     IsVisible="{Binding IsExistingTicket}">
                 <VerticalStackLayout Spacing="6">
                     <Label Text="Attached Problems" FontSize="15" FontAttributes="Bold" />
