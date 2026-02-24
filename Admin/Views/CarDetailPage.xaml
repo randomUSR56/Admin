@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Admin.ViewModels"
+             x:Class="Admin.Views.CarDetailPage"
+             x:DataType="vm:CarDetailViewModel"
+             Title="{Binding PageTitle}">
+
+    <ScrollView Padding="20">
+        <VerticalStackLayout Spacing="16"
+                             MaximumWidthRequest="500"
+                             HorizontalOptions="Center">
+
+            <!-- Error -->
+            <Border Stroke="{StaticResource Red100Accent}"
+                    BackgroundColor="#33FF0000"
+                    StrokeShape="RoundRectangle 8"
+                    Padding="12"
+                    IsVisible="{Binding HasError}">
+                <Label Text="{Binding ErrorMessage}"
+                       TextColor="{StaticResource Red100Accent}"
+                       FontSize="13" />
+            </Border>
+
+            <!-- User ID -->
+            <VerticalStackLayout Spacing="6">
+                <Label Text="User ID" FontSize="13" TextColor="{StaticResource Gray300}" />
+                <Entry Text="{Binding UserId}"
+                       Placeholder="Owner user ID"
+                       Keyboard="Numeric" />
+            </VerticalStackLayout>
+
+            <!-- Make -->
+            <VerticalStackLayout Spacing="6">
+                <Label Text="Make" FontSize="13" TextColor="{StaticResource Gray300}" />
+                <Entry Text="{Binding Make}"
+                       Placeholder="e.g. Toyota, BMW, Ford" />
+            </VerticalStackLayout>
+
+            <!-- Model -->
+            <VerticalStackLayout Spacing="6">
+                <Label Text="Model" FontSize="13" TextColor="{StaticResource Gray300}" />
+                <Entry Text="{Binding Model}"
+                       Placeholder="e.g. Corolla, X5, Focus" />
+            </VerticalStackLayout>
+
+            <!-- Year -->
+            <VerticalStackLayout Spacing="6">
+                <Label Text="Year" FontSize="13" TextColor="{StaticResource Gray300}" />
+                <Entry Text="{Binding Year}"
+                       Placeholder="e.g. 2024"
+                       Keyboard="Numeric" />
+            </VerticalStackLayout>
+
+            <!-- License Plate -->
+            <VerticalStackLayout Spacing="6">
+                <Label Text="License Plate" FontSize="13" TextColor="{StaticResource Gray300}" />
+                <Entry Text="{Binding LicensePlate}"
+                       Placeholder="e.g. ABC-123" />
+            </VerticalStackLayout>
+
+            <!-- VIN (optional) -->
+            <VerticalStackLayout Spacing="6">
+                <Label Text="VIN (optional)" FontSize="13" TextColor="{StaticResource Gray300}" />
+                <Entry Text="{Binding Vin}"
+                       Placeholder="Vehicle Identification Number" />
+            </VerticalStackLayout>
+
+            <!-- Color (optional) -->
+            <VerticalStackLayout Spacing="6">
+                <Label Text="Color (optional)" FontSize="13" TextColor="{StaticResource Gray300}" />
+                <Entry Text="{Binding Color}"
+                       Placeholder="e.g. Red, Blue, Black" />
+            </VerticalStackLayout>
+
+            <!-- Actions -->
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="12" Margin="0,16,0,0">
+                <Button Text="Cancel"
+                        Command="{Binding CancelCommand}"
+                        BackgroundColor="{StaticResource Gray600}"
+                        CornerRadius="8"
+                        HeightRequest="44" />
+
+                <Button Grid.Column="1"
+                        Text="{Binding IsBusy, Converter={StaticResource BusyTextConverter}, ConverterParameter='Save|Saving...'}"
+                        Command="{Binding SaveCommand}"
+                        IsEnabled="{Binding IsBusy, Converter={StaticResource InvertBoolConverter}}"
+                        CornerRadius="8"
+                        HeightRequest="44" />
+            </Grid>
+
+            <!-- Loading -->
+            <ActivityIndicator IsRunning="{Binding IsBusy}"
+                               IsVisible="{Binding IsBusy}"
+                               Color="{StaticResource Primary}"
+                               HorizontalOptions="Center" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
