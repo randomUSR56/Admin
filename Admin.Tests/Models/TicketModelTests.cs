@@ -222,4 +222,54 @@ public class TicketModelTests
         var ticket = new Ticket { CarId = 7 };
         Assert.Equal("Car #7", ticket.CarDisplay);
     }
+
+    // ── Status-aware workflow flags ──
+
+    [Theory]
+    [InlineData("open", true)]
+    [InlineData("assigned", false)]
+    [InlineData("in_progress", false)]
+    [InlineData("completed", false)]
+    [InlineData("closed", false)]
+    public void Ticket_CanAccept_OnlyWhenOpen(string status, bool expected)
+    {
+        var ticket = new Ticket { Status = status };
+        Assert.Equal(expected, ticket.CanAccept);
+    }
+
+    [Theory]
+    [InlineData("open", false)]
+    [InlineData("assigned", true)]
+    [InlineData("in_progress", false)]
+    [InlineData("completed", false)]
+    [InlineData("closed", false)]
+    public void Ticket_CanStart_OnlyWhenAssigned(string status, bool expected)
+    {
+        var ticket = new Ticket { Status = status };
+        Assert.Equal(expected, ticket.CanStart);
+    }
+
+    [Theory]
+    [InlineData("open", false)]
+    [InlineData("assigned", false)]
+    [InlineData("in_progress", true)]
+    [InlineData("completed", false)]
+    [InlineData("closed", false)]
+    public void Ticket_CanComplete_OnlyWhenInProgress(string status, bool expected)
+    {
+        var ticket = new Ticket { Status = status };
+        Assert.Equal(expected, ticket.CanComplete);
+    }
+
+    [Theory]
+    [InlineData("open", true)]
+    [InlineData("assigned", true)]
+    [InlineData("in_progress", true)]
+    [InlineData("completed", false)]
+    [InlineData("closed", false)]
+    public void Ticket_CanClose_NotWhenCompletedOrClosed(string status, bool expected)
+    {
+        var ticket = new Ticket { Status = status };
+        Assert.Equal(expected, ticket.CanClose);
+    }
 }
