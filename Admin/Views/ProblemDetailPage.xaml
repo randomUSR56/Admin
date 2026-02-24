@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Admin.ViewModels"
+             x:Class="Admin.Views.ProblemDetailPage"
+             x:DataType="vm:ProblemDetailViewModel"
+             Title="{Binding PageTitle}">
+
+    <ScrollView Padding="20">
+        <VerticalStackLayout Spacing="16"
+                             MaximumWidthRequest="500"
+                             HorizontalOptions="Center">
+
+            <!-- Error -->
+            <Border Stroke="{StaticResource Red100Accent}"
+                    BackgroundColor="#33FF0000"
+                    StrokeShape="RoundRectangle 8"
+                    Padding="12"
+                    IsVisible="{Binding HasError}">
+                <Label Text="{Binding ErrorMessage}"
+                       TextColor="{StaticResource Red100Accent}"
+                       FontSize="13" />
+            </Border>
+
+            <!-- Name -->
+            <VerticalStackLayout Spacing="6">
+                <Label Text="Name" FontSize="13" TextColor="{StaticResource Gray300}" />
+                <Entry Text="{Binding Name}"
+                       Placeholder="Problem name (e.g. Worn brake pads)" />
+            </VerticalStackLayout>
+
+            <!-- Category -->
+            <VerticalStackLayout Spacing="6">
+                <Label Text="Category" FontSize="13" TextColor="{StaticResource Gray300}" />
+                <Picker ItemsSource="{Binding AvailableCategories}"
+                        SelectedItem="{Binding SelectedCategory}"
+                        Title="Select category" />
+            </VerticalStackLayout>
+
+            <!-- Description -->
+            <VerticalStackLayout Spacing="6">
+                <Label Text="Description (optional)" FontSize="13" TextColor="{StaticResource Gray300}" />
+                <Editor Text="{Binding Description}"
+                        Placeholder="Describe the problem..."
+                        HeightRequest="120"
+                        AutoSize="TextChanges" />
+            </VerticalStackLayout>
+
+            <!-- Active Toggle -->
+            <Grid ColumnDefinitions="*,Auto" Padding="0,4">
+                <Label Text="Active"
+                       FontSize="14"
+                       VerticalOptions="Center" />
+                <Switch Grid.Column="1"
+                        IsToggled="{Binding IsActive}"
+                        OnColor="{StaticResource Primary}" />
+            </Grid>
+
+            <!-- Actions -->
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="12" Margin="0,16,0,0">
+                <Button Text="Cancel"
+                        Command="{Binding CancelCommand}"
+                        BackgroundColor="{StaticResource Gray600}"
+                        CornerRadius="8"
+                        HeightRequest="44" />
+
+                <Button Grid.Column="1"
+                        Text="{Binding IsBusy, Converter={StaticResource BusyTextConverter}, ConverterParameter='Save|Saving...'}"
+                        Command="{Binding SaveCommand}"
+                        IsEnabled="{Binding IsBusy, Converter={StaticResource InvertBoolConverter}}"
+                        CornerRadius="8"
+                        HeightRequest="44" />
+            </Grid>
+
+            <!-- Loading -->
+            <ActivityIndicator IsRunning="{Binding IsBusy}"
+                               IsVisible="{Binding IsBusy}"
+                               Color="{StaticResource Primary}"
+                               HorizontalOptions="Center" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

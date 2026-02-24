@@ -9,6 +9,7 @@ namespace Admin
             InitializeComponent();
 
             Routing.RegisterRoute("UserDetail", typeof(UserDetailPage));
+            Routing.RegisterRoute("ProblemDetail", typeof(ProblemDetailPage));
         }
     }
 }

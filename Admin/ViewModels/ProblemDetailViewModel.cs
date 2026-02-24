@@ -5,30 +5,30 @@ using Admin.Services;
 
 namespace Admin.ViewModels;
 
-[QueryProperty(nameof(UserId), "userId")]
-public partial class UserDetailViewModel : ObservableObject
+[QueryProperty(nameof(ProblemId), "problemId")]
+public partial class ProblemDetailViewModel : ObservableObject
 {
     private readonly IApiClient _apiClient;
 
-    public UserDetailViewModel(IApiClient apiClient)
+    public ProblemDetailViewModel(IApiClient apiClient)
     {
         _apiClient = apiClient;
     }
 
     [ObservableProperty]
-    private int _userId;
+    private int _problemId;
 
     [ObservableProperty]
     private string _name = string.Empty;
 
     [ObservableProperty]
-    private string _email = string.Empty;
+    private string _selectedCategory = "engine";
 
     [ObservableProperty]
-    private string _password = string.Empty;
+    private string? _description;
 
     [ObservableProperty]
-    private string _selectedRole = "user";
+    private bool _isActive = true;
 
     [ObservableProperty]
     private bool _isBusy;
@@ -40,39 +40,39 @@ public partial class UserDetailViewModel : ObservableObject
     private bool _hasError;
 
     [ObservableProperty]
-    private string _pageTitle = "Create User";
+    private string _pageTitle = "Create Problem";
 
     [ObservableProperty]
-    private bool _isExistingUser;
+    private bool _isExistingProblem;
 
-    public string[] AvailableRoles { get; } = ["user", "mechanic", "admin"];
+    public string[] AvailableCategories { get; } =
+        ["engine", "transmission", "electrical", "brakes", "suspension", "steering", "body", "other"];
 
-    partial void OnUserIdChanged(int value)
+    partial void OnProblemIdChanged(int value)
     {
         if (value > 0)
         {
-            IsExistingUser = true;
-            PageTitle = "Edit User";
-            LoadUserCommand.Execute(null);
+            IsExistingProblem = true;
+            PageTitle = "Edit Problem";
+            LoadProblemCommand.Execute(null);
         }
     }
 
     [RelayCommand]
-    private async Task LoadUserAsync()
+    private async Task LoadProblemAsync()
     {
-        if (UserId <= 0) return;
+        if (ProblemId <= 0) return;
 
         IsBusy = true;
         HasError = false;
 
         try
         {
-            var user = await _apiClient.GetUserAsync(UserId);
-            Name = user.Name;
-            Email = user.Email;
-
-            if (user.Roles.Count > 0)
-                SelectedRole = user.Roles[0].Name;
+            var problem = await _apiClient.GetProblemAsync(ProblemId);
+            Name = problem.Name;
+            SelectedCategory = problem.Category;
+            Description = problem.Description;
+            IsActive = problem.IsActive;
         }
         catch (Exception ex)
         {
@@ -88,10 +88,17 @@ public partial class UserDetailViewModel : ObservableObject
     [RelayCommand]
     private async Task SaveAsync()
     {
-        if (string.IsNullOrWhiteSpace(Name) || string.IsNullOrWhiteSpace(Email))
+        if (string.IsNullOrWhiteSpace(Name))
         {
             HasError = true;
-            ErrorMessage = "Name and email are required.";
+            ErrorMessage = "Name is required.";
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(SelectedCategory))
+        {
+            HasError = true;
+            ErrorMessage = "Category is required.";
             return;
         }
 
@@ -100,38 +107,29 @@ public partial class UserDetailViewModel : ObservableObject
 
         try
         {
-            if (IsExistingUser)
+            if (IsExistingProblem)
             {
-                var request = new UpdateUserRequest
+                var request = new UpdateProblemRequest
                 {
                     Name = Name.Trim(),
-                    Email = Email.Trim(),
-                    Role = SelectedRole
+                    Category = SelectedCategory,
+                    Description = Description?.Trim(),
+                    IsActive = IsActive
                 };
 
-                if (!string.IsNullOrWhiteSpace(Password))
-                    request.Password = Password;
-
-                await _apiClient.UpdateUserAsync(UserId, request);
+                await _apiClient.UpdateProblemAsync(ProblemId, request);
             }
             else
             {
-                if (string.IsNullOrWhiteSpace(Password))
-                {
-                    HasError = true;
-                    ErrorMessage = "Password is required for new users.";
-                    return;
-                }
-
-                var request = new CreateUserRequest
+                var request = new CreateProblemRequest
                 {
                     Name = Name.Trim(),
-                    Email = Email.Trim(),
-                    Password = Password,
-                    Role = SelectedRole
+                    Category = SelectedCategory,
+                    Description = Description?.Trim(),
+                    IsActive = IsActive
                 };
 
-                await _apiClient.CreateUserAsync(request);
+                await _apiClient.CreateProblemAsync(request);
             }
 
             await Shell.Current.GoToAsync("..");

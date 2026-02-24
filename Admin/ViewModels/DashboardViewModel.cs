@@ -8,10 +8,10 @@ namespace Admin.ViewModels;
 
 public partial class DashboardViewModel : ObservableObject
 {
-    private readonly ApiClient _apiClient;
+    private readonly IApiClient _apiClient;
     private readonly AuthTokenStore _tokenStore;
 
-    public DashboardViewModel(ApiClient apiClient, AuthTokenStore tokenStore)
+    public DashboardViewModel(IApiClient apiClient, AuthTokenStore tokenStore)
     {
         _apiClient = apiClient;
         _tokenStore = tokenStore;
@@ -35,6 +35,9 @@ public partial class DashboardViewModel : ObservableObject
     [ObservableProperty]
     private int _totalUsers;
 
+    [ObservableProperty]
+    private int _totalProblems;
+
     [RelayCommand]
     private async Task LoadDataAsync()
     {
@@ -51,6 +54,9 @@ public partial class DashboardViewModel : ObservableObject
 
             var users = await _apiClient.GetUsersAsync();
             TotalUsers = users.Total;
+
+            var problems = await _apiClient.GetProblemsAsync();
+            TotalProblems = problems.Total;
         }
         catch (ApiException ex) when (ex.IsUnauthorized)
         {
@@ -72,6 +78,12 @@ public partial class DashboardViewModel : ObservableObject
     private async Task NavigateToUsersAsync()
     {
         await Shell.Current.GoToAsync("//Main/Users");
+    }
+
+    [RelayCommand]
+    private async Task NavigateToProblemsAsync()
+    {
+        await Shell.Current.GoToAsync("//Main/Problems");
     }
 
     [RelayCommand]

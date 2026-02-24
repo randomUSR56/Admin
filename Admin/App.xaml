@@ -15,6 +15,8 @@
             <converters:BusyTextConverter x:Key="BusyTextConverter" />
             <converters:StatusColorConverter x:Key="StatusColorConverter" />
             <converters:StatusTextConverter x:Key="StatusTextConverter" />
+            <converters:BoolToColorConverter x:Key="BoolToColorConverter" />
+            <converters:CategoryColorConverter x:Key="CategoryColorConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>
