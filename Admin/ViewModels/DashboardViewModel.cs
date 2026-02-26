@@ -8,10 +8,10 @@ namespace Admin.ViewModels;
 
 public partial class DashboardViewModel : ObservableObject
 {
-    private readonly ApiClient _apiClient;
+    private readonly IApiClient _apiClient;
     private readonly AuthTokenStore _tokenStore;
 
-    public DashboardViewModel(ApiClient apiClient, AuthTokenStore tokenStore)
+    public DashboardViewModel(IApiClient apiClient, AuthTokenStore tokenStore)
     {
         _apiClient = apiClient;
         _tokenStore = tokenStore;
@@ -35,6 +35,15 @@ public partial class DashboardViewModel : ObservableObject
     [ObservableProperty]
     private int _totalUsers;
 
+    [ObservableProperty]
+    private int _totalProblems;
+
+    [ObservableProperty]
+    private int _totalCars;
+
+    [ObservableProperty]
+    private int _totalTickets;
+
     [RelayCommand]
     private async Task LoadDataAsync()
     {
@@ -51,11 +60,20 @@ public partial class DashboardViewModel : ObservableObject
 
             var users = await _apiClient.GetUsersAsync();
             TotalUsers = users.Total;
+
+            var problems = await _apiClient.GetProblemsAsync();
+            TotalProblems = problems.Total;
+
+            var cars = await _apiClient.GetCarsAsync();
+            TotalCars = cars.Total;
+
+            var tickets = await _apiClient.GetTicketsAsync();
+            TotalTickets = tickets.Total;
         }
         catch (ApiException ex) when (ex.IsUnauthorized)
         {
             _tokenStore.Clear();
-            await Shell.Current.GoToAsync("//Login/LoginPage");
+            await Shell.Current.GoToAsync("//LoginPage");
         }
         catch (Exception ex)
         {
@@ -71,7 +89,25 @@ public partial class DashboardViewModel : ObservableObject
     [RelayCommand]
     private async Task NavigateToUsersAsync()
     {
-        await Shell.Current.GoToAsync("//Main/Users");
+        await Shell.Current.GoToAsync("//Users/UsersPage");
+    }
+
+    [RelayCommand]
+    private async Task NavigateToProblemsAsync()
+    {
+        await Shell.Current.GoToAsync("//Problems/ProblemsPage");
+    }
+
+    [RelayCommand]
+    private async Task NavigateToCarsAsync()
+    {
+        await Shell.Current.GoToAsync("//Cars/CarsPage");
+    }
+
+    [RelayCommand]
+    private async Task NavigateToTicketsAsync()
+    {
+        await Shell.Current.GoToAsync("//Tickets/TicketsPage");
     }
 
     [RelayCommand]
@@ -90,7 +126,7 @@ public partial class DashboardViewModel : ObservableObject
         finally
         {
             IsBusy = false;
-            await Shell.Current.GoToAsync("//Login/LoginPage");
+            await Shell.Current.GoToAsync("//LoginPage");
         }
     }
 }

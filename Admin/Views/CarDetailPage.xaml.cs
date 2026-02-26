@@ -2,9 +2,9 @@ using Admin.ViewModels;
 
 namespace Admin.Views;
 
-public partial class UserDetailPage : ContentPage
+public partial class CarDetailPage : ContentPage
 {
-    public UserDetailPage(UserDetailViewModel viewModel)
+    public CarDetailPage(CarDetailViewModel viewModel)
     {
         InitializeComponent();
         BindingContext = viewModel;

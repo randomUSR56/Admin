@@ -2,8 +2,8 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:Admin.ViewModels"
-             x:Class="Admin.Views.UserDetailPage"
-             x:DataType="vm:UserDetailViewModel"
+             x:Class="Admin.Views.ProblemDetailPage"
+             x:DataType="vm:ProblemDetailViewModel"
              Title="{Binding PageTitle}">
 
     <Shell.BackButtonBehavior>
@@ -34,38 +34,35 @@
             <VerticalStackLayout Spacing="6">
                 <Label Text="Name" FontSize="13" TextColor="{StaticResource Gray300}" />
                 <Entry Text="{Binding Name}"
-                       Placeholder="Full name" />
+                       Placeholder="Problem name (e.g. Worn brake pads)" />
             </VerticalStackLayout>
 
-            <!-- Email -->
+            <!-- Category -->
             <VerticalStackLayout Spacing="6">
-                <Label Text="Email" FontSize="13" TextColor="{StaticResource Gray300}" />
-                <Entry Text="{Binding Email}"
-                       Placeholder="user@example.com"
-                       Keyboard="Email" />
+                <Label Text="Category" FontSize="13" TextColor="{StaticResource Gray300}" />
+                <Picker ItemsSource="{Binding AvailableCategories}"
+                        SelectedItem="{Binding SelectedCategory}"
+                        Title="Select category" />
             </VerticalStackLayout>
 
-            <!-- Password -->
+            <!-- Description -->
             <VerticalStackLayout Spacing="6">
-                <Label FontSize="13" TextColor="{StaticResource Gray300}">
-                    <Label.Text>
-                        <Binding Path="IsExistingUser"
-                                 Converter="{StaticResource BusyTextConverter}"
-                                 ConverterParameter="Password (leave blank to keep current)|Password" />
-                    </Label.Text>
-                </Label>
-                <Entry Text="{Binding Password}"
-                       Placeholder="Enter password"
-                       IsPassword="True" />
+                <Label Text="Description (optional)" FontSize="13" TextColor="{StaticResource Gray300}" />
+                <Editor Text="{Binding Description}"
+                        Placeholder="Describe the problem..."
+                        HeightRequest="120"
+                        AutoSize="TextChanges" />
             </VerticalStackLayout>
 
-            <!-- Role -->
-            <VerticalStackLayout Spacing="6">
-                <Label Text="Role" FontSize="13" TextColor="{StaticResource Gray300}" />
-                <Picker ItemsSource="{Binding AvailableRoles}"
-                        SelectedItem="{Binding SelectedRole}"
-                        Title="Select role" />
-            </VerticalStackLayout>
+            <!-- Active Toggle -->
+            <Grid ColumnDefinitions="*,Auto" Padding="0,4">
+                <Label Text="Active"
+                       FontSize="14"
+                       VerticalOptions="Center" />
+                <Switch Grid.Column="1"
+                        IsToggled="{Binding IsActive}"
+                        OnColor="{StaticResource Primary}" />
+            </Grid>
 
             <!-- Actions -->
             <Grid ColumnDefinitions="*,*" ColumnSpacing="12" Margin="0,16,0,0">

@@ -6,18 +6,18 @@ using Admin.Services;
 
 namespace Admin.ViewModels;
 
-public partial class UsersViewModel : ObservableObject
+public partial class CarsViewModel : ObservableObject
 {
     private readonly IApiClient _apiClient;
     private readonly AuthTokenStore _tokenStore;
 
-    public UsersViewModel(IApiClient apiClient, AuthTokenStore tokenStore)
+    public CarsViewModel(IApiClient apiClient, AuthTokenStore tokenStore)
     {
         _apiClient = apiClient;
         _tokenStore = tokenStore;
     }
 
-    public ObservableCollection<User> Users { get; } = [];
+    public ObservableCollection<Car> Cars { get; } = [];
 
     [ObservableProperty]
     private bool _isBusy;
@@ -32,38 +32,32 @@ public partial class UsersViewModel : ObservableObject
     private string _searchText = string.Empty;
 
     [ObservableProperty]
-    private string? _selectedRole;
-
-    [ObservableProperty]
     private int _currentPage = 1;
 
     [ObservableProperty]
     private int _lastPage = 1;
 
     [ObservableProperty]
-    private int _totalUsers;
-
-    public string[] AvailableRoles { get; } = ["All", "user", "mechanic", "admin"];
+    private int _totalCars;
 
     [RelayCommand]
-    private async Task LoadUsersAsync()
+    private async Task LoadCarsAsync()
     {
         IsBusy = true;
         HasError = false;
 
         try
         {
-            var role = SelectedRole is null or "All" ? null : SelectedRole;
             var search = string.IsNullOrWhiteSpace(SearchText) ? null : SearchText.Trim();
 
-            var result = await _apiClient.GetUsersAsync(CurrentPage, role, search);
+            var result = await _apiClient.GetCarsAsync(CurrentPage, null, search);
 
-            Users.Clear();
-            foreach (var user in result.Data)
-                Users.Add(user);
+            Cars.Clear();
+            foreach (var car in result.Data)
+                Cars.Add(car);
 
             LastPage = result.LastPage;
-            TotalUsers = result.Total;
+            TotalCars = result.Total;
         }
         catch (ApiException ex) when (ex.IsUnauthorized)
         {
@@ -85,7 +79,7 @@ public partial class UsersViewModel : ObservableObject
     private async Task SearchAsync()
     {
         CurrentPage = 1;
-        await LoadUsersAsync();
+        await LoadCarsAsync();
     }
 
     [RelayCommand]
@@ -94,7 +88,7 @@ public partial class UsersViewModel : ObservableObject
         if (CurrentPage < LastPage)
         {
             CurrentPage++;
-            await LoadUsersAsync();
+            await LoadCarsAsync();
         }
     }
 
@@ -104,16 +98,16 @@ public partial class UsersViewModel : ObservableObject
         if (CurrentPage > 1)
         {
             CurrentPage--;
-            await LoadUsersAsync();
+            await LoadCarsAsync();
         }
     }
 
     [RelayCommand]
-    private async Task DeleteUserAsync(User user)
+    private async Task DeleteCarAsync(Car car)
     {
         bool confirm = await Shell.Current.DisplayAlertAsync(
             "Confirm Delete",
-            $"Are you sure you want to delete {user.Name}?",
+            $"Are you sure you want to delete \"{car.DisplayName}\"?",
             "Delete", "Cancel");
 
         if (!confirm) return;
@@ -121,9 +115,9 @@ public partial class UsersViewModel : ObservableObject
         IsBusy = true;
         try
         {
-            await _apiClient.DeleteUserAsync(user.Id);
-            Users.Remove(user);
-            TotalUsers--;
+            await _apiClient.DeleteCarAsync(car.Id);
+            Cars.Remove(car);
+            TotalCars--;
         }
         catch (ApiException ex)
         {
@@ -136,14 +130,14 @@ public partial class UsersViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task ViewUserAsync(User user)
+    private async Task ViewCarAsync(Car car)
     {
-        await Shell.Current.GoToAsync($"UserDetail?userId={user.Id}");
+        await Shell.Current.GoToAsync($"CarDetail?carId={car.Id}");
     }
 
     [RelayCommand]
-    private async Task CreateUserAsync()
+    private async Task CreateCarAsync()
     {
-        await Shell.Current.GoToAsync("UserDetail");
+        await Shell.Current.GoToAsync("CarDetail");
     }
 }

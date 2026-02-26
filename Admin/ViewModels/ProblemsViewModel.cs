@@ -6,18 +6,18 @@ using Admin.Services;
 
 namespace Admin.ViewModels;
 
-public partial class UsersViewModel : ObservableObject
+public partial class ProblemsViewModel : ObservableObject
 {
     private readonly IApiClient _apiClient;
     private readonly AuthTokenStore _tokenStore;
 
-    public UsersViewModel(IApiClient apiClient, AuthTokenStore tokenStore)
+    public ProblemsViewModel(IApiClient apiClient, AuthTokenStore tokenStore)
     {
         _apiClient = apiClient;
         _tokenStore = tokenStore;
     }
 
-    public ObservableCollection<User> Users { get; } = [];
+    public ObservableCollection<Problem> Problems { get; } = [];
 
     [ObservableProperty]
     private bool _isBusy;
@@ -32,7 +32,10 @@ public partial class UsersViewModel : ObservableObject
     private string _searchText = string.Empty;
 
     [ObservableProperty]
-    private string? _selectedRole;
+    private string? _selectedCategory;
+
+    [ObservableProperty]
+    private string? _selectedActiveFilter;
 
     [ObservableProperty]
     private int _currentPage = 1;
@@ -41,29 +44,39 @@ public partial class UsersViewModel : ObservableObject
     private int _lastPage = 1;
 
     [ObservableProperty]
-    private int _totalUsers;
+    private int _totalProblems;
 
-    public string[] AvailableRoles { get; } = ["All", "user", "mechanic", "admin"];
+    public string[] AvailableCategories { get; } =
+        ["All", "engine", "transmission", "electrical", "brakes", "suspension", "steering", "body", "other"];
+
+    public string[] ActiveFilters { get; } = ["All", "Active", "Inactive"];
 
     [RelayCommand]
-    private async Task LoadUsersAsync()
+    private async Task LoadProblemsAsync()
     {
         IsBusy = true;
         HasError = false;
 
         try
         {
-            var role = SelectedRole is null or "All" ? null : SelectedRole;
+            var category = SelectedCategory is null or "All" ? null : SelectedCategory;
             var search = string.IsNullOrWhiteSpace(SearchText) ? null : SearchText.Trim();
 
-            var result = await _apiClient.GetUsersAsync(CurrentPage, role, search);
+            bool? isActive = SelectedActiveFilter switch
+            {
+                "Active" => true,
+                "Inactive" => false,
+                _ => null
+            };
 
-            Users.Clear();
-            foreach (var user in result.Data)
-                Users.Add(user);
+            var result = await _apiClient.GetProblemsAsync(CurrentPage, category, isActive, search);
+
+            Problems.Clear();
+            foreach (var problem in result.Data)
+                Problems.Add(problem);
 
             LastPage = result.LastPage;
-            TotalUsers = result.Total;
+            TotalProblems = result.Total;
         }
         catch (ApiException ex) when (ex.IsUnauthorized)
         {
@@ -85,7 +98,7 @@ public partial class UsersViewModel : ObservableObject
     private async Task SearchAsync()
     {
         CurrentPage = 1;
-        await LoadUsersAsync();
+        await LoadProblemsAsync();
     }
 
     [RelayCommand]
@@ -94,7 +107,7 @@ public partial class UsersViewModel : ObservableObject
         if (CurrentPage < LastPage)
         {
             CurrentPage++;
-            await LoadUsersAsync();
+            await LoadProblemsAsync();
         }
     }
 
@@ -104,16 +117,16 @@ public partial class UsersViewModel : ObservableObject
         if (CurrentPage > 1)
         {
             CurrentPage--;
-            await LoadUsersAsync();
+            await LoadProblemsAsync();
         }
     }
 
     [RelayCommand]
-    private async Task DeleteUserAsync(User user)
+    private async Task DeleteProblemAsync(Problem problem)
     {
         bool confirm = await Shell.Current.DisplayAlertAsync(
             "Confirm Delete",
-            $"Are you sure you want to delete {user.Name}?",
+            $"Are you sure you want to delete \"{problem.Name}\"?",
             "Delete", "Cancel");
 
         if (!confirm) return;
@@ -121,9 +134,9 @@ public partial class UsersViewModel : ObservableObject
         IsBusy = true;
         try
         {
-            await _apiClient.DeleteUserAsync(user.Id);
-            Users.Remove(user);
-            TotalUsers--;
+            await _apiClient.DeleteProblemAsync(problem.Id);
+            Problems.Remove(problem);
+            TotalProblems--;
         }
         catch (ApiException ex)
         {
@@ -136,14 +149,14 @@ public partial class UsersViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task ViewUserAsync(User user)
+    private async Task ViewProblemAsync(Problem problem)
     {
-        await Shell.Current.GoToAsync($"UserDetail?userId={user.Id}");
+        await Shell.Current.GoToAsync($"ProblemDetail?problemId={problem.Id}");
     }
 
     [RelayCommand]
-    private async Task CreateUserAsync()
+    private async Task CreateProblemAsync()
     {
-        await Shell.Current.GoToAsync("UserDetail");
+        await Shell.Current.GoToAsync("ProblemDetail");
     }
 }

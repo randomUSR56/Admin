@@ -2,8 +2,8 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:Admin.ViewModels"
-             x:Class="Admin.Views.UserDetailPage"
-             x:DataType="vm:UserDetailViewModel"
+             x:Class="Admin.Views.CarDetailPage"
+             x:DataType="vm:CarDetailViewModel"
              Title="{Binding PageTitle}">
 
     <Shell.BackButtonBehavior>
@@ -30,41 +30,55 @@
                        FontSize="13" />
             </Border>
 
-            <!-- Name -->
+            <!-- User ID -->
             <VerticalStackLayout Spacing="6">
-                <Label Text="Name" FontSize="13" TextColor="{StaticResource Gray300}" />
-                <Entry Text="{Binding Name}"
-                       Placeholder="Full name" />
+                <Label Text="User ID" FontSize="13" TextColor="{StaticResource Gray300}" />
+                <Entry Text="{Binding UserId}"
+                       Placeholder="Owner user ID"
+                       Keyboard="Numeric" />
             </VerticalStackLayout>
 
-            <!-- Email -->
+            <!-- Make -->
             <VerticalStackLayout Spacing="6">
-                <Label Text="Email" FontSize="13" TextColor="{StaticResource Gray300}" />
-                <Entry Text="{Binding Email}"
-                       Placeholder="user@example.com"
-                       Keyboard="Email" />
+                <Label Text="Make" FontSize="13" TextColor="{StaticResource Gray300}" />
+                <Entry Text="{Binding Make}"
+                       Placeholder="e.g. Toyota, BMW, Ford" />
             </VerticalStackLayout>
 
-            <!-- Password -->
+            <!-- Model -->
             <VerticalStackLayout Spacing="6">
-                <Label FontSize="13" TextColor="{StaticResource Gray300}">
-                    <Label.Text>
-                        <Binding Path="IsExistingUser"
-                                 Converter="{StaticResource BusyTextConverter}"
-                                 ConverterParameter="Password (leave blank to keep current)|Password" />
-                    </Label.Text>
-                </Label>
-                <Entry Text="{Binding Password}"
-                       Placeholder="Enter password"
-                       IsPassword="True" />
+                <Label Text="Model" FontSize="13" TextColor="{StaticResource Gray300}" />
+                <Entry Text="{Binding Model}"
+                       Placeholder="e.g. Corolla, X5, Focus" />
             </VerticalStackLayout>
 
-            <!-- Role -->
+            <!-- Year -->
             <VerticalStackLayout Spacing="6">
-                <Label Text="Role" FontSize="13" TextColor="{StaticResource Gray300}" />
-                <Picker ItemsSource="{Binding AvailableRoles}"
-                        SelectedItem="{Binding SelectedRole}"
-                        Title="Select role" />
+                <Label Text="Year" FontSize="13" TextColor="{StaticResource Gray300}" />
+                <Entry Text="{Binding Year}"
+                       Placeholder="e.g. 2024"
+                       Keyboard="Numeric" />
+            </VerticalStackLayout>
+
+            <!-- License Plate -->
+            <VerticalStackLayout Spacing="6">
+                <Label Text="License Plate" FontSize="13" TextColor="{StaticResource Gray300}" />
+                <Entry Text="{Binding LicensePlate}"
+                       Placeholder="e.g. ABC-123" />
+            </VerticalStackLayout>
+
+            <!-- VIN (optional) -->
+            <VerticalStackLayout Spacing="6">
+                <Label Text="VIN (optional)" FontSize="13" TextColor="{StaticResource Gray300}" />
+                <Entry Text="{Binding Vin}"
+                       Placeholder="Vehicle Identification Number" />
+            </VerticalStackLayout>
+
+            <!-- Color (optional) -->
+            <VerticalStackLayout Spacing="6">
+                <Label Text="Color (optional)" FontSize="13" TextColor="{StaticResource Gray300}" />
+                <Entry Text="{Binding Color}"
+                       Placeholder="e.g. Red, Blue, Black" />
             </VerticalStackLayout>
 
             <!-- Actions -->

@@ -36,7 +36,7 @@
                 <!-- Server Status -->
                 <Border StrokeShape="RoundRectangle 12"
                         Padding="16"
-                        BackgroundColor="{StaticResource Gray900}">
+                        BackgroundColor="{AppThemeBinding Light=#F5F5F5, Dark=#212121}">
                     <HorizontalStackLayout Spacing="10">
                         <Label Text="●"
                                TextColor="{Binding IsServerOnline, Converter={StaticResource StatusColorConverter}}"
@@ -64,28 +64,91 @@
                        FontSize="18"
                        FontAttributes="Bold" />
 
-                <Border StrokeShape="RoundRectangle 12"
-                        Padding="20"
-                        BackgroundColor="{StaticResource Gray900}">
-                    <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto" ColumnSpacing="12" RowSpacing="4">
-                        <Label Text="Total Users"
-                               FontSize="14"
-                               TextColor="{StaticResource Gray400}"
-                               Grid.Row="0" Grid.Column="0" />
-                        <Label Text="{Binding TotalUsers}"
-                               FontSize="24"
-                               FontAttributes="Bold"
-                               Grid.Row="1" Grid.Column="0" />
-                    </Grid>
-                </Border>
+                <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" ColumnSpacing="12" RowSpacing="12">
+                    <Border StrokeShape="RoundRectangle 12"
+                            Padding="20"
+                            BackgroundColor="{AppThemeBinding Light=#F5F5F5, Dark=#212121}">
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="Total Users"
+                                   FontSize="14"
+                                   TextColor="{StaticResource Gray400}" />
+                            <Label Text="{Binding TotalUsers}"
+                                   FontSize="24"
+                                   FontAttributes="Bold" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <Border Grid.Column="1"
+                            StrokeShape="RoundRectangle 12"
+                            Padding="20"
+                            BackgroundColor="{AppThemeBinding Light=#F5F5F5, Dark=#212121}">
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="Total Problems"
+                                   FontSize="14"
+                                   TextColor="{StaticResource Gray400}" />
+                            <Label Text="{Binding TotalProblems}"
+                                   FontSize="24"
+                                   FontAttributes="Bold" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <Border Grid.Row="1" Grid.Column="0"
+                            StrokeShape="RoundRectangle 12"
+                            Padding="20"
+                            BackgroundColor="{AppThemeBinding Light=#F5F5F5, Dark=#212121}">
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="Total Cars"
+                                   FontSize="14"
+                                   TextColor="{StaticResource Gray400}" />
+                            <Label Text="{Binding TotalCars}"
+                                   FontSize="24"
+                                   FontAttributes="Bold" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <Border Grid.Row="1" Grid.Column="1"
+                            StrokeShape="RoundRectangle 12"
+                            Padding="20"
+                            BackgroundColor="{AppThemeBinding Light=#F5F5F5, Dark=#212121}">
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="Total Tickets"
+                                   FontSize="14"
+                                   TextColor="{StaticResource Gray400}" />
+                            <Label Text="{Binding TotalTickets}"
+                                   FontSize="24"
+                                   FontAttributes="Bold" />
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
 
                 <!-- Navigation -->
                 <Label Text="Management"
                        FontSize="18"
                        FontAttributes="Bold" />
 
-                <Button Text="👥  Manage Users"
+                <Button Text="Manage Users"
                         Command="{Binding NavigateToUsersCommand}"
+                        HeightRequest="50"
+                        CornerRadius="10"
+                        FontSize="16"
+                        HorizontalOptions="Fill" />
+
+                <Button Text="Manage Problems"
+                        Command="{Binding NavigateToProblemsCommand}"
+                        HeightRequest="50"
+                        CornerRadius="10"
+                        FontSize="16"
+                        HorizontalOptions="Fill" />
+
+                <Button Text="Manage Cars"
+                        Command="{Binding NavigateToCarsCommand}"
+                        HeightRequest="50"
+                        CornerRadius="10"
+                        FontSize="16"
+                        HorizontalOptions="Fill" />
+
+                <Button Text="Manage Tickets"
+                        Command="{Binding NavigateToTicketsCommand}"
                         HeightRequest="50"
                         CornerRadius="10"
                         FontSize="16"

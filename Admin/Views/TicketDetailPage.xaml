@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Admin.ViewModels"
+             xmlns:models="clr-namespace:Admin.Models"
+             x:Class="Admin.Views.TicketDetailPage"
+             x:DataType="vm:TicketDetailViewModel"
+             Title="{Binding PageTitle}">
+
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior IsVisible="True" IsEnabled="True" TextOverride="Back" />
+    </Shell.BackButtonBehavior>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="← Back" Clicked="OnBackClicked" />
+    </ContentPage.ToolbarItems>
+
+    <ScrollView Padding="20">
+        <VerticalStackLayout Spacing="16"
+                             MaximumWidthRequest="600"
+                             HorizontalOptions="Center">
+
+            <!-- Error -->
+            <Border Stroke="{StaticResource Red100Accent}"
+                    BackgroundColor="#33FF0000"
+                    StrokeShape="RoundRectangle 8"
+                    Padding="12"
+                    IsVisible="{Binding HasError}">
+                <Label Text="{Binding ErrorMessage}"
+                       TextColor="{StaticResource Red100Accent}"
+                       FontSize="13" />
+            </Border>
+
+            <!-- Info section for existing tickets -->
+            <Border StrokeShape="RoundRectangle 8"
+                    Padding="14"
+                    BackgroundColor="{AppThemeBinding Light=#F5F5F5, Dark=#212121}"
+                    IsVisible="{Binding IsExistingTicket}">
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="Ticket Info" FontSize="15" FontAttributes="Bold" />
+                    <Label Text="{Binding OwnerDisplay, StringFormat='Owner: {0}'}" FontSize="13" TextColor="{StaticResource Gray400}" />
+                    <Label Text="{Binding MechanicDisplay, StringFormat='Mechanic: {0}'}" FontSize="13" TextColor="{StaticResource Gray400}" />
+                    <Label Text="{Binding CarDisplay, StringFormat='Car: {0}'}" FontSize="13" TextColor="{StaticResource Gray400}" />
+                    <Label Text="{Binding CreatedAtDisplay, StringFormat='Created: {0}'}" FontSize="13" TextColor="{StaticResource Gray400}" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Attached problems for existing tickets -->
+            <Border StrokeShape="RoundRectangle 8"
+                    Padding="14"
+                    BackgroundColor="{AppThemeBinding Light=#F5F5F5, Dark=#212121}"
+                    IsVisible="{Binding IsExistingTicket}">
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="Attached Problems" FontSize="15" FontAttributes="Bold" />
+                    <CollectionView ItemsSource="{Binding AttachedProblems}" HeightRequest="120">
+                        <CollectionView.EmptyView>
+                            <Label Text="No problems attached" FontSize="12" TextColor="{StaticResource Gray400}" />
+                        </CollectionView.EmptyView>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="models:Problem">
+                                <HorizontalStackLayout Spacing="8" Padding="0,2">
+                                    <Border StrokeShape="RoundRectangle 4"
+                                            Padding="6,2"
+                                            BackgroundColor="{Binding Category, Converter={StaticResource CategoryColorConverter}}"
+                                            StrokeThickness="0">
+                                        <Label Text="{Binding Category}" FontSize="10" TextColor="White" />
+                                    </Border>
+                                    <Label Text="{Binding Name}" FontSize="13" VerticalOptions="Center" />
+                                    <Label Text="{Binding Pivot.Notes, StringFormat='({0})'}"
+                                           FontSize="11"
+                                           TextColor="{StaticResource Gray400}"
+                                           VerticalOptions="Center" />
+                                </HorizontalStackLayout>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Car ID -->
+            <VerticalStackLayout Spacing="6">
+                <Label Text="Car ID" FontSize="13" TextColor="{StaticResource Gray300}" />
+                <Entry Text="{Binding CarId}"
+                       Placeholder="Car ID for the ticket"
+                       Keyboard="Numeric" />
+            </VerticalStackLayout>
+
+            <!-- Description -->
+            <VerticalStackLayout Spacing="6">
+                <Label Text="Description" FontSize="13" TextColor="{StaticResource Gray300}" />
+                <Editor Text="{Binding Description}"
+                        Placeholder="Describe the issue..."
+                        HeightRequest="120"
+                        AutoSize="TextChanges" />
+            </VerticalStackLayout>
+
+            <!-- Priority -->
+            <VerticalStackLayout Spacing="6">
+                <Label Text="Priority" FontSize="13" TextColor="{StaticResource Gray300}" />
+                <Picker ItemsSource="{Binding AvailablePriorities}"
+                        SelectedItem="{Binding SelectedPriority}"
+                        Title="Select priority" />
+            </VerticalStackLayout>
+
+            <!-- Status (edit mode only) -->
+            <VerticalStackLayout Spacing="6"
+                                 IsVisible="{Binding IsExistingTicket}">
+                <Label Text="Status" FontSize="13" TextColor="{StaticResource Gray300}" />
+                <Picker ItemsSource="{Binding AvailableStatuses}"
+                        SelectedItem="{Binding SelectedStatus}"
+                        Title="Select status" />
+            </VerticalStackLayout>
+
+            <!-- Mechanic ID (edit mode only) -->
+            <VerticalStackLayout Spacing="6"
+                                 IsVisible="{Binding IsExistingTicket}">
+                <Label Text="Mechanic ID (optional)" FontSize="13" TextColor="{StaticResource Gray300}" />
+                <Entry Text="{Binding MechanicId}"
+                       Placeholder="Assign to mechanic (user ID)"
+                       Keyboard="Numeric" />
+            </VerticalStackLayout>
+
+            <!-- Problem IDs -->
+            <VerticalStackLayout Spacing="6">
+                <Label Text="Problem IDs (comma-separated)" FontSize="13" TextColor="{StaticResource Gray300}" />
+                <Entry Text="{Binding ProblemIdsText}"
+                       Placeholder="e.g. 1, 3, 7" />
+            </VerticalStackLayout>
+
+            <!-- Problem Notes -->
+            <VerticalStackLayout Spacing="6">
+                <Label Text="Problem Notes (comma-separated, matching IDs above)" FontSize="13" TextColor="{StaticResource Gray300}" />
+                <Entry Text="{Binding ProblemNotesText}"
+                       Placeholder="e.g. Front left, , Rear brake" />
+            </VerticalStackLayout>
+
+            <!-- Actions -->
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="12" Margin="0,16,0,0">
+                <Button Text="Cancel"
+                        Command="{Binding CancelCommand}"
+                        BackgroundColor="{StaticResource Gray600}"
+                        CornerRadius="8"
+                        HeightRequest="44" />
+
+                <Button Grid.Column="1"
+                        Text="{Binding IsBusy, Converter={StaticResource BusyTextConverter}, ConverterParameter='Save|Saving...'}"
+                        Command="{Binding SaveCommand}"
+                        IsEnabled="{Binding IsBusy, Converter={StaticResource InvertBoolConverter}}"
+                        CornerRadius="8"
+                        HeightRequest="44" />
+            </Grid>
+
+            <!-- Loading -->
+            <ActivityIndicator IsRunning="{Binding IsBusy}"
+                               IsVisible="{Binding IsBusy}"
+                               Color="{StaticResource Primary}"
+                               HorizontalOptions="Center" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

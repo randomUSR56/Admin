@@ -20,9 +20,9 @@ namespace Admin
             shell.Loaded += async (s, e) =>
             {
                 if (await _tokenStore.HasTokenAsync())
-                    await Shell.Current.GoToAsync("//Main/Dashboard");
+                    await Shell.Current.GoToAsync("//Dashboard/DashboardPage");
                 else
-                    await Shell.Current.GoToAsync("//Login/LoginPage");
+                    await Shell.Current.GoToAsync("//LoginPage");
             };
 
             return window;
