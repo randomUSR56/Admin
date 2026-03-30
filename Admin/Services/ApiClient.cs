@@ -21,8 +21,17 @@ public class ApiClient : IApiClient
         _tokenStore = tokenStore;
     }
 
+    private void ApplyBaseAddress()
+    {
+        var url = _tokenStore.GetServerUrl();
+        var uri = new Uri(url.TrimEnd('/'));
+        if (_httpClient.BaseAddress != uri)
+            _httpClient.BaseAddress = uri;
+    }
+
     private async Task SetAuthHeaderAsync()
     {
+        ApplyBaseAddress();
         var token = await _tokenStore.GetTokenAsync();
         if (!string.IsNullOrEmpty(token))
         {
@@ -35,6 +44,7 @@ public class ApiClient : IApiClient
 
     public async Task<LoginResponse> LoginAsync(LoginRequest request)
     {
+        ApplyBaseAddress();
         var response = await _httpClient.PostAsJsonAsync("/api/login", request);
 
         if (!response.IsSuccessStatusCode)
@@ -419,6 +429,7 @@ public class ApiClient : IApiClient
     {
         try
         {
+            ApplyBaseAddress();
             var response = await _httpClient.GetAsync("/api/health");
             return response.IsSuccessStatusCode;
         }

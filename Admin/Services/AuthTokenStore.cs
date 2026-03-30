@@ -6,6 +6,8 @@ public class AuthTokenStore
     private const string UserIdKey = "auth_user_id";
     private const string UserNameKey = "auth_user_name";
     private const string UserEmailKey = "auth_user_email";
+    private const string ServerUrlKey = "server_url";
+    internal const string DefaultServerUrl = "http://onlyfix.local";
 
     public Task SaveTokenAsync(string token)
     {
@@ -51,5 +53,15 @@ public class AuthTokenStore
     {
         var token = Preferences.Default.Get<string?>(TokenKey, null);
         return Task.FromResult(!string.IsNullOrEmpty(token));
+    }
+
+    public string GetServerUrl()
+    {
+        return Preferences.Default.Get(ServerUrlKey, DefaultServerUrl);
+    }
+
+    public void SaveServerUrl(string url)
+    {
+        Preferences.Default.Set(ServerUrlKey, url);
     }
 }

@@ -23,8 +23,8 @@ namespace Admin
 
             builder.Services.AddHttpClient<IApiClient, ApiClient>(client =>
             {
-                // TODO: Update this to your Laravel backend URL
-                client.BaseAddress = new Uri("http://onlyfix.local");
+                var savedUrl = Preferences.Default.Get("server_url", AuthTokenStore.DefaultServerUrl);
+                client.BaseAddress = new Uri(savedUrl);
                 client.DefaultRequestHeaders.Add("Accept", "application/json");
             });
 

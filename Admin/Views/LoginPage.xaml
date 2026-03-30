@@ -38,6 +38,18 @@
                        FontSize="13" />
             </Border>
 
+            <!-- Server URL -->
+            <VerticalStackLayout Spacing="6">
+                <Label Text="Server URL"
+                       FontSize="13"
+                       TextColor="{StaticResource Gray200}" />
+                <Entry Text="{Binding ServerUrl}"
+                       Placeholder="http://your-server-url"
+                       Keyboard="Url"
+                       ReturnType="Next"
+                       ClearButtonVisibility="WhileEditing" />
+            </VerticalStackLayout>
+
             <!-- Email -->
             <VerticalStackLayout Spacing="6">
                 <Label Text="Email"

@@ -8,11 +8,17 @@ namespace Admin.ViewModels;
 public partial class LoginViewModel : ObservableObject
 {
     private readonly IApiClient _apiClient;
+    private readonly AuthTokenStore _tokenStore;
 
-    public LoginViewModel(IApiClient apiClient)
+    public LoginViewModel(IApiClient apiClient, AuthTokenStore tokenStore)
     {
         _apiClient = apiClient;
+        _tokenStore = tokenStore;
+        _serverUrl = _tokenStore.GetServerUrl();
     }
+
+    [ObservableProperty]
+    private string _serverUrl = string.Empty;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(LoginCommand))]
@@ -39,6 +45,12 @@ public partial class LoginViewModel : ObservableObject
         HasError = false;
         ErrorMessage = string.Empty;
         IsBusy = true;
+
+        // Save server URL if it was changed
+        if (!string.IsNullOrWhiteSpace(ServerUrl))
+        {
+            _tokenStore.SaveServerUrl(ServerUrl.Trim());
+        }
 
         try
         {
